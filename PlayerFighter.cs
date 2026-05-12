@@ -1,0 +1,108 @@
+using System.Collections;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class PlayerFighter : MonoBehaviour
+{
+    [Header("Health")]
+    private Slider healthBar;
+    public int maxHealth = 100;
+    public int currentHealth;
+    public TextMeshProUGUI currentHealthText;
+
+    [Header("Fight")]
+    public GameObject bulletPrefab;
+    public float attackRange = 10f;
+    public float searchDelay = 2.5f;
+    public int maxTarget = 1;
+
+    private void Start()
+    {
+        healthBar = GetComponentInChildren<Slider>();
+        if (healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = maxHealth;
+        }
+        currentHealth = maxHealth;
+        currentHealthText.text = currentHealth.ToString();
+
+        StartCoroutine(FindEnemys());
+    }
+
+    private IEnumerator FindEnemys()
+    {
+        while (true)
+        {
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
+            int target = maxTarget;
+
+            foreach (Collider col in hitColliders)
+            {
+                if (col.CompareTag("Enemy"))
+                {
+                    if (bulletPrefab == null) yield break;
+                    CreateBullet(col.gameObject.transform);
+                    //Debug.Log("Player Fighter: bullet has been create!");
+                    target--;
+                    if (target <= 0) break;
+                }
+            }
+
+            /*for (int i = 0; i < maxTarget; i++)
+            {
+                if (bulletPrefab == null) break;
+                int hit = Random.Range(0, hitColliders.Length);
+                if (hitColliders[hit].CompareTag("Enemy"))
+                {
+                    CreateBullet(hitColliders[hit].transform);
+                }
+            }*/
+            
+            yield return new WaitForSeconds(searchDelay);
+        }
+    }
+
+    public void DecreaseSearchDelay()
+    {
+        searchDelay = Mathf.Max(0.1f, searchDelay - 0.1f);
+    }
+
+    private void CreateBullet(Transform transform)
+    {
+        //Vector3 distance = transform.position - this.transform.position;
+        GameObject bullet = Instantiate(bulletPrefab, this.transform.position + Vector3.forward, Quaternion.identity);
+        BulletProjectile bp = bullet.GetComponent<BulletProjectile>();
+        bp.SetTarget(transform);
+    }
+
+    public bool CheckHealth()
+    {
+        if (currentHealth < maxHealth) return true;
+        return false;
+    }
+
+    public void UpdateHealth(int value)
+    {
+        currentHealth += value;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        healthBar.value = currentHealth;
+        currentHealthText.text = currentHealth.ToString();
+
+        if (currentHealth <= 0) 
+        { 
+            Destroy(this.gameObject);
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    public void SetMaxHealth(int value)
+    {
+        /*int newHealth = maxHealth;
+        newHealth += value;*/
+        maxHealth += value;
+        maxHealth = Mathf.Max(5, maxHealth);
+        healthBar.maxValue = maxHealth;
+    }
+}
