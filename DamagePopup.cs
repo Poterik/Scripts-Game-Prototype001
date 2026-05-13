@@ -6,8 +6,8 @@ public class DamagePopup : MonoBehaviour
     private TextMeshPro damageText;
     private float lifetime = 1f;
     private float speed = 2f;
-    private string quoiseColor = "#00FBFF";
-    private string pinkColor = "#FF0076";
+    //private string quoiseColor = "#00FBFF";
+    //private string pinkColor = "#FF0076";
 
     private void Awake()
     {

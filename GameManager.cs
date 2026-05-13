@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
 
             GameObject prefab = GetEnemy();
 
-            Instantiate(prefab, SetRandomPosition(rangeSpawn), Quaternion.identity);
+            Instantiate(prefab, SetRandomPosition(rangeSpawn / 3f), Quaternion.identity);
             currentEnemyCount++;
             yield return new WaitForSeconds(spawnDelay);
         }
@@ -168,7 +168,8 @@ public class GameManager : MonoBehaviour
     {
         Vector3 randomPos = new Vector3(Random.Range(-range, range), 20, Random.Range(-range, range));
         //Vector3 spawnPos = player.position + randomPos;
-        Vector3 spawnPos = transform.position + randomPos;
+        //Vector3 spawnPos = transform.position + randomPos;
+        Vector3 spawnPos = player.transform.position + randomPos;
         if (Physics.Raycast(spawnPos, Vector3.down, out RaycastHit hit, 200f))
         { 
             return hit.point + Vector3.up * 0.5f; 
