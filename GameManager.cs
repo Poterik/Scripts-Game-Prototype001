@@ -21,12 +21,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Upgrade Settings")]
     public int bulletDamage = 50;
-    public int bulletRicochet = 0;
+    public int bulletRicochet = 3;
     public float bulletSpeed = 8f;
     public int vampirism = 0;
     public float bulletSearchRange = 10f;
     //public float dropRate = 0f;
-    public float critChance = 0f;
+    public float critChance = 0.1f;
     public float critDamage = 0f;
 
     [Header("Spawner")]

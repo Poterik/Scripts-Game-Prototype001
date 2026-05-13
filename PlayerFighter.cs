@@ -15,7 +15,7 @@ public class PlayerFighter : MonoBehaviour
     public GameObject bulletPrefab;
     public float attackRange = 10f;
     public float searchDelay = 2.5f;
-    public int maxTarget = 1;
+    public int maxTarget = 2;
 
     private void Start()
     {
