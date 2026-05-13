@@ -31,7 +31,6 @@ public class UpgradeInitializer : MonoBehaviour
             if (mpc != null)
             {
                 mpc.moveSpeed += u.bonus;
-                mpc.sprintSpeed += u.bonus;
             }
         }, manager.allUpgrades);
         Bind("Bulleter", u =>

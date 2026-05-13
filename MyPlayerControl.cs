@@ -6,8 +6,8 @@ using UnityEngine.InputSystem;
 public class MyPlayerControl : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 5f;
-    public float sprintSpeed = 10f;
+    public float moveSpeed = 10f;
+    //public float sprintSpeed = 10f;
     public float jumpHeight = 2f;
     public float rotationSpeed = 10f;
 
@@ -86,8 +86,8 @@ public class MyPlayerControl : MonoBehaviour
             verticalVelocity += Physics.gravity.y * Time.deltaTime * 2f;
         }
 
-        float speed = inputActions.Player.Sprint.IsPressed() ? sprintSpeed : moveSpeed;
-        Vector3 moveVelocity = worldDirection * speed;
+        //float speed = inputActions.Player.Sprint.IsPressed() ? sprintSpeed : moveSpeed;
+        Vector3 moveVelocity = worldDirection * moveSpeed;
 
         moveVelocity.y = verticalVelocity;
         controller.Move(moveVelocity * Time.deltaTime);
