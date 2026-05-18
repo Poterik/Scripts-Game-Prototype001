@@ -45,7 +45,7 @@ public class UpgradeManager : MonoBehaviour
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
             //ShowRandomUpgrades(allUpgrades);
-            ShowRandomUpgrades(legendaryUpgrades);
+            //ShowRandomUpgrades(legendaryUpgrades);
             //ShowRandomUpgrades(cursedUpgrades);
             //ApplyAllUpgrades();
         }

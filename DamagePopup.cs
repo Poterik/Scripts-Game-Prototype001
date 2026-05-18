@@ -33,4 +33,15 @@ public class DamagePopup : MonoBehaviour
                 break;
         }
     }
+
+    public void SetName(string name)
+    {
+        damageText.text = name;
+    }
+
+    public void SetSpeedup(string name, float speedUp)
+    {
+        damageText.text = name;
+        speed = speedUp;
+    }
 }

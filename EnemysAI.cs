@@ -21,6 +21,7 @@ public class EnemysAI : MonoBehaviour
     private bool isColliding = false;
     private bool isDead;
     private int expForDead = 50;
+    public int bounty = 5;
     public float speed = 3;
     private float saveSpeed;
     public float stoppingDistance = 1.3f;  //1.3
@@ -31,6 +32,8 @@ public class EnemysAI : MonoBehaviour
         //player = GameManager.Instance.player.gameObject.transform;
         player = FindAnyObjectByType<PlayerFighter>().GetComponent<Transform>();
         collide = GetComponent<SphereCollider>();
+        //bounty = bounty + (GameManager.Instance.lootBoxCost / 3);
+        bounty = bounty + (GameManager.Instance.gameDifferent - 1) * 2;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -139,6 +142,7 @@ public class EnemysAI : MonoBehaviour
             isDead = true;
             GameManager.Instance.UpdateExp(expForDead);
             GameManager.Instance.OnEnemyDied();
+            GameManager.Instance.UpdateMoney(bounty);
             UpgradeStatistics.Instance.RecordEndStatistic("Kills", 1);
             Destroy(gameObject);
         }

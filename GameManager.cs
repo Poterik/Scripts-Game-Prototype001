@@ -8,6 +8,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Money")]
+    public TextMeshProUGUI moneyDisplay;
+    private int money = 0;
+    public GameObject moneyPrefab;
+    public GameObject currentLootBox;
+    public int lootBoxCost;
+
     [Header("References")]
     public PlayerFighter player;
 
@@ -18,6 +25,7 @@ public class GameManager : MonoBehaviour
     private int expForDiff = 100;
     private int currentExp;
     public bool gameOver = false;
+    private int lifetime;
 
     [Header("Upgrade Settings")]
     public int bulletDamage = 50;
@@ -66,8 +74,67 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnHeals());
         StartCoroutine(SpawnLootBox());
         UpdateLevelSlider();
-        StarterPack();
+        //StarterPack();
         SpawnStory();
+        Initializer();
+    }
+
+    private void Update()
+    {
+        /*if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            LootBox[] lbs = FindObjectsByType<LootBox>();
+            foreach (LootBox l in lbs)
+            {
+                if (!l.onTerr) continue;
+                UpgradeManager.Instance.ShowRandomUpgrades(l.upgrades);
+                Destroy(l.gameObject);
+            }
+        }*/
+
+        if (Keyboard.current.eKey.wasPressedThisFrame && currentLootBox != null && !UpgradeManager.Instance.upgradeWindow.activeSelf && TryOpenLootBox())
+        {
+            LootBox lb = currentLootBox.GetComponent<LootBox>();
+            UpgradeManager.Instance.ShowRandomUpgrades(lb.upgrades);
+            lootBoxCost += gameDifferent; //5
+            UpgradeStatistics.Instance.RecordEndStatistic("Loot Box Opens", 1);
+            Destroy(currentLootBox);
+        }
+    }
+
+    private void Initializer()
+    {
+        moneyDisplay.text = $"{money:N0}$";
+
+        StartCoroutine(LifeTimer());
+    }
+
+    private bool TryOpenLootBox()
+    {
+        if (money < lootBoxCost) return false;
+        UpdateMoney(-lootBoxCost);
+        return true;
+    }
+
+    public void UpdateMoney(int bounty)
+    {
+        //int getMoney = bounty + (gameDifferent - 1) * 2;
+        money += bounty;
+        moneyDisplay.text = $"{money:N0}$";
+        if (bounty > 0) UpgradeStatistics.Instance.RecordEndStatistic("Money", bounty);
+        Instantiate(moneyPrefab, player.transform.position + Vector3.right * 1.25f, Quaternion.identity)
+            .GetComponent<DamagePopup>()
+            .SetName($"{bounty}$");
+    }
+
+    private IEnumerator LifeTimer()
+    {
+        while (!gameOver)
+        {
+            lifetime += 1;
+            UpgradeStatistics.Instance.RecordEndStatistic("Lifetime Mins", 1);
+            yield return new WaitForSeconds(60f);
+        }
     }
 
     private void SpawnStory()
