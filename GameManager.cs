@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject moneyPrefab;
     public GameObject currentLootBox;
     public int lootBoxCost;
+    public bool lootBoxTerr;
 
     [Header("References")]
     public PlayerFighter player;
@@ -81,18 +82,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*if (Keyboard.current.eKey.wasPressedThisFrame)
-        {
-            LootBox[] lbs = FindObjectsByType<LootBox>();
-            foreach (LootBox l in lbs)
-            {
-                if (!l.onTerr) continue;
-                UpgradeManager.Instance.ShowRandomUpgrades(l.upgrades);
-                Destroy(l.gameObject);
-            }
-        }*/
-
-        if (Keyboard.current.eKey.wasPressedThisFrame && currentLootBox != null && !UpgradeManager.Instance.upgradeWindow.activeSelf && TryOpenLootBox())
+        if (Keyboard.current.eKey.wasPressedThisFrame && CheckActiveWindow() && TryOpenLootBox())
         {
             LootBox lb = currentLootBox.GetComponent<LootBox>();
             UpgradeManager.Instance.ShowRandomUpgrades(lb.upgrades);
@@ -109,9 +99,27 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LifeTimer());
     }
 
+    public void ActivateTerritoryBool()
+    {
+        StartCoroutine(ChangeTerritoryBool());
+    }
+
+    private IEnumerator ChangeTerritoryBool()
+    {
+        lootBoxTerr = true;
+        yield return new WaitForSeconds(1f);
+        lootBoxTerr = false;
+    }
+
+    private bool CheckActiveWindow()
+    {
+        if (UpgradeManager.Instance.upgradeWindow.activeSelf || UIManager.Instance.escapeMenu.activeSelf) return false;
+        return true;
+    }
+
     private bool TryOpenLootBox()
     {
-        if (money < lootBoxCost) return false;
+        if (money < lootBoxCost || !lootBoxTerr || currentLootBox == null) return false;
         UpdateMoney(-lootBoxCost);
         return true;
     }

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class LootBox : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         GameManager.Instance.currentLootBox = this.gameObject;
+        GameManager.Instance.ActivateTerritoryBool();
         cost = GameManager.Instance.lootBoxCost;
 
         CreateInteract();
@@ -25,16 +27,6 @@ public class LootBox : MonoBehaviour
             .GetComponent<DamagePopup>()
             .SetSpeedup($"[E] {cost}$", 0f);
     }
-
-
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            UpgradeManager.Instance.ShowRandomUpgrades(upgrades);
-            Destroy(gameObject);
-        }
-    }*/
 
     public void SetList(List<UpgradeData> list)
     {
