@@ -46,7 +46,7 @@ public class UpgradeManager : MonoBehaviour
         {
             //ShowRandomUpgrades(allUpgrades);
             //ShowRandomUpgrades(legendaryUpgrades);
-            //ShowRandomUpgrades(cursedUpgrades);
+            ShowRandomUpgrades(cursedUpgrades);
             //ApplyAllUpgrades();
         }
     }
@@ -88,6 +88,7 @@ public class UpgradeManager : MonoBehaviour
 
         UpgradeStatistics.Instance?.RecordUpgradeSelection(upgrade.name);
         UpgradeStatistics.Instance.RecordEndStatistic("Upgrades", 1);
+        if (cursedUpgrades.Contains(upgrade)) StartCoroutine(GameManager.Instance.CursedDebuff());
 
         Debug.Log($"✓ Applied: {upgrade.name} (+{upgrade.bonus})");
     }

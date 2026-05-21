@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     public GameObject currentLootBox;
     public int lootBoxCost;
     public bool lootBoxTerr;
+    //Cursed Cost in Health
+    public bool cursedLootBox;
+    public int cursedLootBoxCost = 100;
+    private int cursedDebuffDelay = 5;
 
     [Header("References")]
     public PlayerFighter player;
@@ -75,7 +79,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnHeals());
         StartCoroutine(SpawnLootBox());
         UpdateLevelSlider();
-        //StarterPack();
+        StarterPack();
         SpawnStory();
         Initializer();
     }
@@ -86,8 +90,8 @@ public class GameManager : MonoBehaviour
         {
             LootBox lb = currentLootBox.GetComponent<LootBox>();
             UpgradeManager.Instance.ShowRandomUpgrades(lb.upgrades);
-            lootBoxCost += gameDifferent; //5
             UpgradeStatistics.Instance.RecordEndStatistic("Loot Box Opens", 1);
+            //if (cursedLootBox) StartCoroutine(CursedDebuff());
             Destroy(currentLootBox);
         }
     }
@@ -99,16 +103,18 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LifeTimer());
     }
 
-    public void ActivateTerritoryBool()
+    public void ActivateTerritoryBool(bool isCursed)
     {
-        StartCoroutine(ChangeTerritoryBool());
+        StartCoroutine(ChangeTerritoryBool(isCursed));
     }
 
-    private IEnumerator ChangeTerritoryBool()
+    private IEnumerator ChangeTerritoryBool(bool isCursed)
     {
         lootBoxTerr = true;
-        yield return new WaitForSeconds(1f);
+        cursedLootBox = isCursed;
+        yield return new WaitForSeconds(2f);
         lootBoxTerr = false;
+        cursedLootBox = false;
     }
 
     private bool CheckActiveWindow()
@@ -120,8 +126,26 @@ public class GameManager : MonoBehaviour
     private bool TryOpenLootBox()
     {
         if (money < lootBoxCost || !lootBoxTerr || currentLootBox == null) return false;
+        /*UpdateMoney(-lootBoxCost);
+        return true;*/
+        if (cursedLootBox) return true;
         UpdateMoney(-lootBoxCost);
+        lootBoxCost += gameDifferent;
         return true;
+    }
+
+    public IEnumerator CursedDebuff()
+    {
+        int currentHealth = player.maxHealth;
+        player.SetMaxHealth(-cursedLootBoxCost);
+        player.UpdateHealth(0);
+
+        yield return new WaitForSeconds(cursedDebuffDelay);
+
+        player.SetMaxHealth(currentHealth - 1);
+        player.UpdateHealth(0);
+        cursedLootBoxCost += 25;
+        cursedDebuffDelay++;
     }
 
     public void UpdateMoney(int bounty)
@@ -228,12 +252,12 @@ public class GameManager : MonoBehaviour
 
     private void StarterPack()
     {
-        for (int i = 0; i < 10; i++)
+        /*for (int i = 0; i < 10; i++)
         {
             Instantiate(defaultLootBoxPrefab, SetRandomPosition(10), Quaternion.identity)
                 .GetComponent<LootBox>()
                 .SetList(UpgradeManager.Instance.allUpgrades);
-        }
+        }*/
         Instantiate(cursedLootBoxPrefab, SetRandomPosition(10), Quaternion.identity)
                 .GetComponent<LootBox>()
                 .SetList(UpgradeManager.Instance.cursedUpgrades);

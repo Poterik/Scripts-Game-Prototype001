@@ -8,7 +8,6 @@ public class UpgradeData
     public string description;
     public Sprite icon;
     public int bonus;
-    public float debuff;
 
     [System.NonSerialized]
     public System.Action<UpgradeData> applyAction;

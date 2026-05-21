@@ -77,49 +77,19 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Extra Criter", u => gameManager.critChance += u.bonus / 100f, manager.legendaryUpgrades);
 
         //Cursed Upgrades
-        Bind("Cursed Damage", u =>
-        {
-            gameManager.bulletDamage += u.bonus;
-            gameManager.player.searchDelay += u.debuff;
-        }, manager.cursedUpgrades);
-        Bind("Cursed Health", u =>
-        {
-            gameManager.player.SetMaxHealth(u.bonus);
-            gameManager.vampirism = Mathf.RoundToInt(Mathf.Max(0, gameManager.vampirism - u.debuff));
-        }, manager.cursedUpgrades);
-        Bind("Cursed Ricochette", u =>
-        {
-            gameManager.bulletRicochet += u.bonus;
-            gameManager.bulletSpeed = Mathf.Max(1f, gameManager.bulletSpeed - u.debuff);
-        }, manager.cursedUpgrades);
-        Bind("Cursed Targeter", u =>
-        {
-            gameManager.player.maxTarget += u.bonus;
-            gameManager.player.attackRange = Mathf.Max(3f, gameManager.player.attackRange - u.debuff);
-        }, manager.cursedUpgrades);
-        Bind("Cursed Attrange", u =>
-        {
-            gameManager.player.attackRange += u.bonus;
-            gameManager.bulletDamage = Mathf.RoundToInt(Mathf.Max(25, gameManager.bulletDamage - u.debuff));
-        }, manager.cursedUpgrades);
-        Bind("Cursed Projectile", u =>
-        {
-            gameManager.bulletSpeed += u.bonus;
-            gameManager.player.maxTarget = Mathf.RoundToInt(Mathf.Max(1, gameManager.player.maxTarget - u.debuff));
-        }, manager.cursedUpgrades);
-        Bind("Cursed Vampirism", u =>
-        {
-            gameManager.vampirism += u.bonus;
-            gameManager.bulletRicochet = Mathf.RoundToInt(Mathf.Max(0, gameManager.bulletRicochet - u.debuff));
-        }, manager.cursedUpgrades);
+        Bind("Cursed Damage", u => gameManager.bulletDamage += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Health", u => gameManager.player.SetMaxHealth(u.bonus), manager.cursedUpgrades);
+        Bind("Cursed Ricochette", u => gameManager.bulletRicochet += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Targeter", u => gameManager.player.maxTarget += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Projectile", u => gameManager.bulletSpeed += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Bulleter", u =>
         {
             for (int i = 0; i < u.bonus; i++)
             {
                 gameManager.player.DecreaseSearchDelay();
             }
-            gameManager.player.SetMaxHealth(Mathf.RoundToInt(-u.debuff));
-            gameManager.player.UpdateHealth(0);
         }, manager.cursedUpgrades);
 
         Debug.Log("✓ Upgrades initialized");

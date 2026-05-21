@@ -102,7 +102,7 @@ public class PlayerFighter : MonoBehaviour
         /*int newHealth = maxHealth;
         newHealth += value;*/
         maxHealth += value;
-        maxHealth = Mathf.Max(5, maxHealth);
+        maxHealth = Mathf.Max(1, maxHealth);
         healthBar.maxValue = maxHealth;
     }
 }
