@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,29 +37,31 @@ public class PlayerFighter : MonoBehaviour
         while (true)
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-            int target = maxTarget;
 
+            List<Collider> enemies = new List<Collider>();
             foreach (Collider col in hitColliders)
             {
                 if (col.CompareTag("Enemy"))
-                {
-                    if (bulletPrefab == null) yield break;
-                    CreateBullet(col.gameObject.transform);
-                    //Debug.Log("Player Fighter: bullet has been create!");
-                    target--;
-                    if (target <= 0) break;
-                }
+                    enemies.Add(col);
             }
 
-            /*for (int i = 0; i < maxTarget; i++)
+            enemies.Sort((a, b) =>
+            Vector3.Distance(transform.position, a.transform.position)
+            .CompareTo(Vector3.Distance(transform.position, b.transform.position))
+            );
+
+            int target = maxTarget;
+            foreach (Collider col in enemies)
             {
-                if (bulletPrefab == null) break;
-                int hit = Random.Range(0, hitColliders.Length);
-                if (hitColliders[hit].CompareTag("Enemy"))
+                if (col.CompareTag("Enemy"))
                 {
-                    CreateBullet(hitColliders[hit].transform);
+                    if (target <= 0) break;
+                    if (bulletPrefab == null) yield break;
+
+                    CreateBullet(col.transform);
+                    target--;
                 }
-            }*/
+            }
             
             yield return new WaitForSeconds(searchDelay);
         }
