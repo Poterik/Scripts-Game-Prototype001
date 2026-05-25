@@ -21,7 +21,6 @@ public class StoryBox : MonoBehaviour
     private List<string> storyContainer = new List<string> 
     {
         "Ricochet - Bullets bounce back at nearby enemies, losing 10% damage.",
-        "Starting HP is 100 units.",
         "The minimum Attack Speed is 0.1. At the beginning it is 2.5.",
         "The minimum Damage is 25.",
         "Fired bullets have a starting speed that can be improved, but they gain speed with each passing second.",

@@ -24,7 +24,7 @@ public class UpgradeInitializer : MonoBehaviour
         //Default Upgrades
         Bind("Ricochette", u => GameManager.Instance.bulletRicochet += u.bonus, manager.allUpgrades);
         Bind("Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.allUpgrades);
-        Bind("Health Point", u => GameManager.Instance.player?.SetMaxHealth(u.bonus), manager.allUpgrades);
+        Bind("Health Point", u => GameManager.Instance.player?.UpdateMaxHealth(u.bonus), manager.allUpgrades);
         Bind("Speedster", u =>
         {
             var mpc = GameManager.Instance.player?.GetComponent<MyPlayerControl>();
@@ -50,7 +50,7 @@ public class UpgradeInitializer : MonoBehaviour
 
         //Legendary Upgrades
         Bind("Extra Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.legendaryUpgrades);
-        Bind("Extra HP", u => GameManager.Instance.player?.SetMaxHealth(u.bonus), manager.legendaryUpgrades);
+        Bind("Extra HP", u => GameManager.Instance.player?.UpdateMaxHealth(u.bonus), manager.legendaryUpgrades);
         Bind("Extra Ricochette", u => GameManager.Instance.bulletRicochet += u.bonus, manager.legendaryUpgrades);
         /*Bind("Extra Speedster", u =>
         {
@@ -78,7 +78,7 @@ public class UpgradeInitializer : MonoBehaviour
 
         //Cursed Upgrades
         Bind("Cursed Damage", u => gameManager.bulletDamage += u.bonus, manager.cursedUpgrades);
-        Bind("Cursed Health", u => gameManager.player.SetMaxHealth(u.bonus), manager.cursedUpgrades);
+        Bind("Cursed Health", u => gameManager.player.UpdateMaxHealth(u.bonus), manager.cursedUpgrades);
         Bind("Cursed Ricochette", u => gameManager.bulletRicochet += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Targeter", u => gameManager.player.maxTarget += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
