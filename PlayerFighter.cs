@@ -81,6 +81,12 @@ public class PlayerFighter : MonoBehaviour
     public void DecreaseSearchDelay()
     {
         searchDelay = Mathf.Max(0.1f, searchDelay - 0.1f);
+        if (searchDelay <= 0.1f)
+        {
+            /*UpgradeData item = UpgradeManager.Instance.allUpgrades.Find(u => u.name == "Bulleter");
+            UpgradeManager.Instance.allUpgrades.Remove(item);*/
+            UpgradeManager.Instance.allUpgrades.RemoveAll(u => u.name == "Bulleter");
+        }
     }
 
     private void CreateBullet(Transform transform)

@@ -67,13 +67,13 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Extra Targeter", u => GameManager.Instance.player.maxTarget += u.bonus, manager.legendaryUpgrades);
         Bind("Extra Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.legendaryUpgrades);
         //Bind("Extra Luckerok", u => GameManager.Instance.dropRate += u.bonus / 100f, manager.legendaryUpgrades);
-        Bind("Extra Bulleter", u =>
+        /*Bind("Extra Bulleter", u =>
         {
             for (int i = 0; i < u.bonus; i++)
             {
                 GameManager.Instance.player?.DecreaseSearchDelay();
             }
-        }, manager.legendaryUpgrades);
+        }, manager.legendaryUpgrades);*/
         Bind("Extra Criter", u => gameManager.critChance += u.bonus / 100f, manager.legendaryUpgrades);
 
         //Cursed Upgrades
@@ -84,13 +84,13 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Projectile", u => gameManager.bulletSpeed += u.bonus, manager.cursedUpgrades);
         //Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
-        Bind("Cursed Bulleter", u =>
+        /*Bind("Cursed Bulleter", u =>
         {
             for (int i = 0; i < u.bonus; i++)
             {
                 gameManager.player.DecreaseSearchDelay();
             }
-        }, manager.cursedUpgrades);
+        }, manager.cursedUpgrades);*/
 
         Debug.Log("✓ Upgrades initialized");
     }
