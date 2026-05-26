@@ -9,13 +9,13 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Money")]
+    [Header("Economy")]
     public TextMeshProUGUI moneyDisplay;
     private int money = 0;
     public GameObject moneyPrefab;
     public int lootBoxCost;
+    public int cursedBoxCost = 75;
     private float radiusLootBoxSearch = 2f;
-    public float cursedMultiple = 5f;
 
     [Header("References")]
     public PlayerFighter player;
@@ -81,14 +81,6 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        /*if (Keyboard.current.eKey.wasPressedThisFrame && CheckActiveWindow() && TryOpenLootBox())
-        {
-            LootBox lb = currentLootBox.GetComponent<LootBox>();
-            UpgradeManager.Instance.ShowRandomUpgrades(lb.upgrades);
-            UpgradeStatistics.Instance.RecordEndStatistic("Loot Box Opens", 1);
-            //if (cursedLootBox) CursedDebuff();
-            Destroy(currentLootBox);
-        }*/
 
         if (Keyboard.current.eKey.wasPressedThisFrame && CheckActiveWindow())
         {
@@ -115,9 +107,9 @@ public class GameManager : MonoBehaviour
         foreach (Collider col in sorted)
         {
             col.TryGetComponent<LootBox>(out LootBox lb);
-            int cost = lb.isCursed ? Mathf.RoundToInt(lootBoxCost * cursedMultiple) : lootBoxCost;
+            //int cost = lb.isCursed ? Mathf.RoundToInt(lootBoxCost * cursedMultiple) : lootBoxCost;
 
-            if (TryOpenLootBox(cost))
+            if (TryOpenLootBox(lb.isCursed))
             {
                 UpgradeManager.Instance?.ShowRandomUpgrades(lb.upgrades);
                 Destroy(lb.gameObject);
@@ -133,14 +125,30 @@ public class GameManager : MonoBehaviour
         return true;
     }
 
-    private bool TryOpenLootBox(int cost)
+    private bool TryOpenLootBox(bool isCursed)
     {
-        if (money < cost) return false;
-        /*UpdateMoney(-lootBoxCost);
+        /*if (money < lootBoxCost) return false;
+
+        UpdateMoney(-lootBoxCost);
+        lootBoxCost += gameDifferent;
         return true;*/
 
-        UpdateMoney(-cost);
-        lootBoxCost += gameDifferent;
+        int cost = isCursed ? cursedBoxCost : lootBoxCost;
+
+        if (isCursed)
+        {
+            if (player.currentHealth <= cost) return false;
+            player.UpdateHealth(-cost);
+            cursedBoxCost += gameDifferent * 2;
+        }
+        else
+        {
+            if (money < cost) return false;
+            UpdateMoney(-cost);
+            lootBoxCost += gameDifferent;
+        }
+
+        //lootBoxCost += gameDifferent;
         return true;
     }
 
@@ -219,7 +227,7 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             Instantiate(healCapsule, SetRandomPosition(rangeSpawn), Quaternion.identity);
-            yield return new WaitForSeconds(spawnDelay * 5);
+            yield return new WaitForSeconds(spawnDelay * 2);
         }
     }
 
@@ -298,7 +306,7 @@ public class GameManager : MonoBehaviour
 
         //expForDiff += expForDiff / 2;
         //expForDiff -= expForDiff % 5;
-        expForDiff = 100 + gameDifferent * 200;
+        expForDiff = 100 + gameDifferent * 50;
 
         float minSpawnDelay = 0.5f;
         spawnDelay = Mathf.Max(spawnDelay / gameDifferent, minSpawnDelay);

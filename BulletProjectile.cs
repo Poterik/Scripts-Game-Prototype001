@@ -78,7 +78,7 @@ public class BulletProjectile : MonoBehaviour
         SpawnDamageText(-totalDamage, Mathf.RoundToInt(damageMultipler));
         UpgradeStatistics.Instance.RecordEndStatistic("Damage", totalDamage);
 
-        TryApplyVampirism(totalDamage);
+        //TryApplyVampirism(totalDamage);
 
         ricochet--;
         damage = Mathf.RoundToInt(damage * 0.9f);

@@ -9,6 +9,7 @@ public class LootBox : MonoBehaviour
     public List<UpgradeData> upgrades = new List<UpgradeData>();
     public GameObject interact;
     private int cost;
+    private int healthCost;
     public bool isCursed;
 
     private void OnTriggerEnter(Collider other)
@@ -16,19 +17,20 @@ public class LootBox : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         cost = GameManager.Instance.lootBoxCost;
+        healthCost = GameManager.Instance.cursedBoxCost;
 
         CreateInteract();
     }
 
     private void CreateInteract()
     {
-        int costdis = isCursed ? Mathf.RoundToInt(cost * GameManager.Instance.cursedMultiple) : cost;
-        //string text = isCursed ? $"[E] {cost * 1.5}$" : $"[E] {cost}$";
-        string newText = $"[E] {costdis}$";
+        //int costdis = isCursed ? Mathf.RoundToInt(cost * GameManager.Instance.cursedMultiple) : cost;
+        string text = isCursed ? $"[E] {healthCost} HP" : $"[E] {cost}$";
+        //string newText = $"[E] {costdis}$";
 
         Instantiate(interact, transform.position + Vector3.up, Quaternion.identity)
             .GetComponent<DamagePopup>()
-            .SetSpeedup(newText, 0f);
+            .SetSpeedup(text, 0f);
     }
 
     public void SetList(List<UpgradeData> list)

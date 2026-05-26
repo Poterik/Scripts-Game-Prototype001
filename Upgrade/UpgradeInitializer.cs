@@ -41,7 +41,7 @@ public class UpgradeInitializer : MonoBehaviour
             }
         },manager.allUpgrades);
         Bind("Projectile", u => GameManager.Instance.bulletSpeed += u.bonus, manager.allUpgrades);
-        Bind("Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.allUpgrades);
+        //Bind("Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.allUpgrades);
         Bind("Attrange", u => GameManager.Instance.player.attackRange += u.bonus, manager.allUpgrades);
         Bind("Targeter", u => GameManager.Instance.player.maxTarget += u.bonus, manager.allUpgrades);
         Bind("Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.allUpgrades);
@@ -62,7 +62,7 @@ public class UpgradeInitializer : MonoBehaviour
             }
         }, manager.legendaryUpgrades);*/
         Bind("Extra Projectile", u => GameManager.Instance.bulletSpeed += u.bonus, manager.legendaryUpgrades);
-        Bind("Extra Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.legendaryUpgrades);
+        //Bind("Extra Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.legendaryUpgrades);
         Bind("Extra Attrange", u => GameManager.Instance.player.attackRange += u.bonus, manager.legendaryUpgrades);
         Bind("Extra Targeter", u => GameManager.Instance.player.maxTarget += u.bonus, manager.legendaryUpgrades);
         Bind("Extra Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.legendaryUpgrades);
@@ -83,7 +83,7 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Cursed Targeter", u => gameManager.player.maxTarget += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Projectile", u => gameManager.bulletSpeed += u.bonus, manager.cursedUpgrades);
-        Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
+        //Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Bulleter", u =>
         {
             for (int i = 0; i < u.bonus; i++)

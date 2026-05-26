@@ -11,6 +11,7 @@ public class PlayerFighter : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public TextMeshProUGUI currentHealthText;
+    public int regeneration = 5;
 
     [Header("Fight")]
     public GameObject bulletPrefab;
@@ -30,6 +31,16 @@ public class PlayerFighter : MonoBehaviour
         currentHealthText.text = currentHealth.ToString();
 
         StartCoroutine(FindEnemys());
+        StartCoroutine(RegenerateHealth());
+    }
+
+    private IEnumerator RegenerateHealth()
+    {
+        while (true)
+        {
+            if (CheckHealth()) UpdateHealth(regeneration);
+            yield return new WaitForSeconds(7.5f);
+        }
     }
 
     private IEnumerator FindEnemys()
