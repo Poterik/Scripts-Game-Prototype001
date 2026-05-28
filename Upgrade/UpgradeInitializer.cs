@@ -49,6 +49,7 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Criter", u => gameManager.critChance += u.bonus / 100f, manager.allUpgrades);
         Bind("Regenerator", u => gameManager.player.regeneration += u.bonus, manager.allUpgrades);
         Bind("Recover", u => gameManager.recovery += u.bonus, manager.allUpgrades);
+        Bind("Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.allUpgrades);
 
         //Legendary Upgrades
         Bind("Extra Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.legendaryUpgrades);
