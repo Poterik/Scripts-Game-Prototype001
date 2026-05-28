@@ -78,6 +78,7 @@ public class UpgradeInitializer : MonoBehaviour
             }
         }, manager.legendaryUpgrades);*/
         Bind("Extra Criter", u => gameManager.critChance += u.bonus / 100f, manager.legendaryUpgrades);
+        Bind("Extra Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.legendaryUpgrades);
 
         //Cursed Upgrades
         Bind("Cursed Damage", u => gameManager.bulletDamage += u.bonus, manager.cursedUpgrades);
@@ -86,6 +87,7 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Cursed Targeter", u => gameManager.player.maxTarget += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Projectile", u => gameManager.bulletSpeed += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.cursedUpgrades);
         //Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
         /*Bind("Cursed Bulleter", u =>
         {

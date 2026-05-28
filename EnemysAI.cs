@@ -43,7 +43,7 @@ public class EnemysAI : MonoBehaviour
         health = baseHealth * (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent);
         //damage = baseDamage + GameManager.Instance.gameDifferent * 2;
         damage = baseDamage + (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent) / 2;
-        speed = speed + GameManager.Instance.gameDifferent * 0.5f;
+        speed = speed + GameManager.Instance.gameDifferent * 0.25f;
         saveSpeed = speed;
     }
 

@@ -206,8 +206,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject GetEnemy()
     {
-        if (gameDifferent < 3) return enemyPrefab;
-        if (gameDifferent < 6) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
+        if (gameDifferent < 5) return enemyPrefab;
+        if (gameDifferent < 10) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
 
         int rand = Random.Range(0, 10);
         return rand switch
