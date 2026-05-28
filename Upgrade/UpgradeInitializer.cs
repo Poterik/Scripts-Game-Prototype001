@@ -47,6 +47,7 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.allUpgrades);
         //Bind("Luckerok", u => GameManager.Instance.dropRate += u.bonus / 100f, manager.allUpgrades);
         Bind("Criter", u => gameManager.critChance += u.bonus / 100f, manager.allUpgrades);
+        Bind("Regenerator", u => gameManager.player.regeneration += u.bonus, manager.allUpgrades);
 
         //Legendary Upgrades
         Bind("Extra Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.legendaryUpgrades);
