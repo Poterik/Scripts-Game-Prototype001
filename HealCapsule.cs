@@ -15,7 +15,8 @@ public class HealCapsule : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerFighter pf = other.GetComponent<PlayerFighter>();
-            pf.UpdateHealth(healPoint);
+            int heal = healPoint + GameManager.Instance.recovery;
+            pf.UpdateHealth(heal);
             Destroy(this.gameObject);
         }
     }

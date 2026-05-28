@@ -38,7 +38,7 @@ public class PlayerFighter : MonoBehaviour
     {
         while (true)
         {
-            if (CheckHealth()) UpdateHealth(regeneration);
+            if (CheckHealth()) UpdateHealth(regeneration + GameManager.Instance.recovery);
             yield return new WaitForSeconds(7.5f);
         }
     }

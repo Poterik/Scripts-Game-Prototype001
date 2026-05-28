@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     //public float dropRate = 0f;
     public float critChance = 0.1f;
     public float critDamage = 0f;
+    public int recovery = 0;
 
     [Header("Spawner")]
     public GameObject enemyPrefab;
