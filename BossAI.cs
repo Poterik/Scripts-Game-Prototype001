@@ -88,7 +88,7 @@ public class BossAI : EnemysAI
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Destroy(collision.gameObject);
-            UpdateHealth(50);
+            UpdateHealth(100);
         }
 
         if (!collision.gameObject.CompareTag("Player") || isDead || !TryUseAttack(BossState.CrystalsArea)) return;

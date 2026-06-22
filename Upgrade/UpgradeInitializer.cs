@@ -25,14 +25,14 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Ricochette", u => GameManager.Instance.bulletRicochet += u.bonus, manager.allUpgrades);
         Bind("Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.allUpgrades);
         //Bind("Health Point", u => GameManager.Instance.player?.UpdateMaxHealth(u.bonus), manager.allUpgrades);
-        Bind("Speedster", u =>
+        /*Bind("Speedster", u =>
         {
             var mpc = GameManager.Instance.player?.GetComponent<MyPlayerControl>();
             if (mpc != null)
             {
                 mpc.moveSpeed += u.bonus;
             }
-        }, manager.allUpgrades);
+        }, manager.allUpgrades);*/
         Bind("Bulleter", u =>
         {
             for (int i = 0; i < u.bonus; i ++)

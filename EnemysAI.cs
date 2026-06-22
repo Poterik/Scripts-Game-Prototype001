@@ -17,6 +17,7 @@ public class EnemysAI : MonoBehaviour
     protected int health;
     public int baseDamage = 10;
     protected int damage;
+    public int damageDivider;
     protected bool isAttacking = false;
     protected bool isColliding = false;
     protected bool isDead;
@@ -43,6 +44,7 @@ public class EnemysAI : MonoBehaviour
         health = baseHealth * (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent);
         //damage = baseDamage + GameManager.Instance.gameDifferent * 2;
         //damage = baseDamage + (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent) / 2;
+        damage = GameManager.Instance.player.maxHealth / damageDivider;
         //speed = speed + GameManager.Instance.gameDifferent * 0.25f;
         saveSpeed = speed;
     }
