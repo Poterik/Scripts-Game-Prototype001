@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PlayerFighter : MonoBehaviour
 {
+    private MyPlayerControl controller;
+
     [Header("Health")]
     private Slider healthBar;
     public int maxHealth = 100;
@@ -19,8 +21,11 @@ public class PlayerFighter : MonoBehaviour
     public float searchDelay = 2.5f;
     public int maxTarget = 2;
 
+
     private void Start()
     {
+        controller = GetComponent<MyPlayerControl>();
+
         healthBar = GetComponentInChildren<Slider>();
         if (healthBar != null)
         {
@@ -32,6 +37,19 @@ public class PlayerFighter : MonoBehaviour
 
         StartCoroutine(FindEnemys());
         StartCoroutine(RegenerateHealth());
+    }
+
+    public IEnumerator SpeedDebuff(int amount = 2, float duration = 15f)
+    {
+        if (controller == null) yield break;
+
+        controller.moveSpeed = Mathf.Max(0, controller.moveSpeed - amount);
+        Debug.Log("Apply speed debuff: " + controller.moveSpeed);
+
+        yield return new WaitForSeconds(duration);
+
+        controller.moveSpeed += amount;
+        Debug.Log("Remove speed debuff: " + controller.moveSpeed);
     }
 
     private IEnumerator RegenerateHealth()

@@ -5,28 +5,28 @@ using UnityEngine.InputSystem;
 
 public class EnemysAI : MonoBehaviour
 {
-    private Transform player;
+    protected Transform player;
     private NavMeshAgent agent;
-    private Animator animator;
-    private Rigidbody rb;
+    protected Animator animator;
+    protected Rigidbody rb;
     private SphereCollider collide;
 
     [Header("Fight")]
     public float attackCD = 2.5f;
     public int baseHealth = 100;
-    private int health;
+    protected int health;
     public int baseDamage = 10;
-    private int damage;
-    private bool isAttacking = false;
-    private bool isColliding = false;
-    private bool isDead;
-    private int expForDead = 50;
+    protected int damage;
+    protected bool isAttacking = false;
+    protected bool isColliding = false;
+    protected bool isDead;
+    protected int expForDead = 50;
     public int bounty = 5;
     public float speed = 3;
     private float saveSpeed;
     public float stoppingDistance = 1.3f;  //1.3
 
-    private void Start()
+    protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         //player = GameManager.Instance.player.gameObject.transform;
@@ -47,16 +47,16 @@ public class EnemysAI : MonoBehaviour
         saveSpeed = speed;
     }
 
-    private void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (isDead || GameManager.Instance.gameOver) return;
 
         NewHandleMovement();
         //HandleAcceleration();
-        NewAcceleration();
+        //NewAcceleration();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -66,7 +66,7 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    protected void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
@@ -74,7 +74,7 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    private void StartAttack()
+    protected void StartAttack()
     {
         if (!isAttacking)
         {
@@ -84,7 +84,7 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    private void NewHandleAttack()
+    protected void NewHandleAttack()
     {
         //if (!canAttack) return;
 
@@ -95,7 +95,7 @@ public class EnemysAI : MonoBehaviour
         //StartCoroutine(AttackCooldown());
     }
 
-    private IEnumerator AttackCooldown()
+    protected IEnumerator AttackCooldown()
     {
         yield return new WaitForSeconds(attackCD);
         isAttacking = false;
@@ -106,7 +106,7 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    private void NewHandleMovement()
+    protected void NewHandleMovement()
     {
         Vector3 direction = player.position - transform.position;
         direction.y = 0;
@@ -130,7 +130,7 @@ public class EnemysAI : MonoBehaviour
         else speed = saveSpeed;
     }
 
-    public void UpdateHealth(int value)
+    public virtual void UpdateHealth(int value)
     {
         if (isDead) return;
 

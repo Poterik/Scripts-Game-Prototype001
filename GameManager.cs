@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     [Header("References")]
     public PlayerFighter player;
+    public Slider bossHealthSlider;
 
     [Header("Level Settings")]
     public Slider levelSlider;
@@ -41,6 +42,7 @@ public class GameManager : MonoBehaviour
     public int recovery = 0;
 
     [Header("Spawner")]
+    public GameObject bossPrefab;
     public GameObject enemyPrefab;
     public GameObject enemyLightPrefab;
     public GameObject enemyTankPrefab;
@@ -304,6 +306,7 @@ public class GameManager : MonoBehaviour
         currentExp = 0;
 
         gameDifferent++;
+        TrySpawnBoss();
 
         //expForDiff += expForDiff / 2;
         //expForDiff -= expForDiff % 5;
@@ -314,6 +317,12 @@ public class GameManager : MonoBehaviour
 
         UpgradeManager.Instance.ShowRandomUpgrades(UpgradeManager.Instance.legendaryUpgrades);
         UpdateLevelSlider();
+    }
+
+    private void TrySpawnBoss()
+    {
+        BossAI bao = FindAnyObjectByType<BossAI>();
+        if (gameDifferent % 10 == 0 && bao == null) Instantiate(bossPrefab);
     }
 
     private void UpdateLevelSlider()
