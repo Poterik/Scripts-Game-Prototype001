@@ -303,13 +303,11 @@ public class GameManager : MonoBehaviour
 
     private void LevelUp()
     {
-        currentExp = 0;
+        currentExp -= expForDiff;
 
         gameDifferent++;
         TrySpawnBoss();
 
-        //expForDiff += expForDiff / 2;
-        //expForDiff -= expForDiff % 5;
         expForDiff = 100 + gameDifferent * 50;
 
         float minSpawnDelay = 0.5f;
