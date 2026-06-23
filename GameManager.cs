@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     public float spawnDelay = 5f;
     public float rangeSpawn = 150f;
     public GameObject healCapsule;
+    public GameObject healCircle;
     public int maxEnemies = 1000;
     private int currentEnemyCount = 0;
     public GameObject cursedLootBoxPrefab;
@@ -95,7 +96,8 @@ public class GameManager : MonoBehaviour
     {
         moneyDisplay.text = $"{money:N0}$";
 
-        StartCoroutine(LifeTimer());
+        StartCoroutine(TrackPlayTime());
+        StartCoroutine(SpawnHealCircle());
     }
 
     private void FindNearbyLootBox()
@@ -166,7 +168,7 @@ public class GameManager : MonoBehaviour
             .SetName($"{bounty}$");
     }
 
-    private IEnumerator LifeTimer()
+    private IEnumerator TrackPlayTime()
     {
         while (!gameOver)
         {
@@ -231,6 +233,17 @@ public class GameManager : MonoBehaviour
         {
             Instantiate(healCapsule, SetRandomPosition(rangeSpawn), Quaternion.identity);
             yield return new WaitForSeconds(spawnDelay * 2);
+        }
+    }
+
+    private IEnumerator SpawnHealCircle(float duration = 30f)
+    {
+        while (true)
+        {
+            Instantiate(healCircle, SetRandomPosition(rangeSpawn / 3), Quaternion.identity)
+                .GetComponent<HealCircle>()
+                .SetLifeTime(duration);
+            yield return new WaitForSeconds(duration);
         }
     }
 

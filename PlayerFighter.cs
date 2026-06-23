@@ -14,6 +14,7 @@ public class PlayerFighter : MonoBehaviour
     public int currentHealth;
     public TextMeshProUGUI currentHealthText;
     public int regeneration = 5;
+    public bool isHealing;
 
     [Header("Fight")]
     public GameObject bulletPrefab;
@@ -61,7 +62,7 @@ public class PlayerFighter : MonoBehaviour
     {
         while (true)
         {
-            if (CheckHealth()) UpdateHealth(regeneration + GameManager.Instance.recovery);
+            if (CheckHealth()) { UpdateHealth(regeneration + GameManager.Instance.recovery); StartCoroutine(ShowHealAura()); }
             yield return new WaitForSeconds(7.5f);
         }
     }
@@ -132,7 +133,7 @@ public class PlayerFighter : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.value = currentHealth;
         currentHealthText.text = currentHealth.ToString();
-        if (value > 0) StartCoroutine(ShowHealAura());
+        
 
         if (currentHealth <= 0) 
         { 
@@ -141,13 +142,13 @@ public class PlayerFighter : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowHealAura(float duration = 1f)
+    public IEnumerator ShowHealAura(float duration = 1f)
     {
         healAura.SetActive(true);
 
         yield return new WaitForSeconds(duration);
 
-        healAura.SetActive(false);
+        if (!isHealing) healAura.SetActive(false);
     }
 
     public void UpdateMaxHealth(int value)

@@ -20,6 +20,7 @@ public class HealCapsule : MonoBehaviour
 
         int heal = healPoint + GameManager.Instance.recovery;
         fighter.UpdateHealth(heal);
+        StartCoroutine(fighter.ShowHealAura());
         Destroy(this.gameObject);
     }
 }
