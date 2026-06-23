@@ -21,6 +21,9 @@ public class PlayerFighter : MonoBehaviour
     public float searchDelay = 2.5f;
     public int maxTarget = 2;
 
+    [Header("References")]
+    public GameObject healAura;
+
 
     private void Start()
     {
@@ -34,6 +37,8 @@ public class PlayerFighter : MonoBehaviour
         }
         currentHealth = maxHealth;
         currentHealthText.text = currentHealth.ToString();
+
+        healAura.SetActive(false);
 
         StartCoroutine(FindEnemys());
         StartCoroutine(RegenerateHealth());
@@ -127,12 +132,22 @@ public class PlayerFighter : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.value = currentHealth;
         currentHealthText.text = currentHealth.ToString();
+        if (value > 0) StartCoroutine(ShowHealAura());
 
         if (currentHealth <= 0) 
         { 
             Destroy(this.gameObject);
             GameManager.Instance.GameOver();
         }
+    }
+
+    private IEnumerator ShowHealAura(float duration = 1f)
+    {
+        healAura.SetActive(true);
+
+        yield return new WaitForSeconds(duration);
+
+        healAura.SetActive(false);
     }
 
     public void UpdateMaxHealth(int value)
