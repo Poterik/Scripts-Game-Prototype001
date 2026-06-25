@@ -227,10 +227,11 @@ public class BossAI : EnemysAI
         if (isDead) return;
 
         //base.UpdateHealth(value);
-        health += value;
+        int damage = value / 2;
+        health += damage;
         bossHealthSlider.value = health;
 
-        TriggerAnimation(value);
+        TriggerAnimation(damage);
 
         if (health <= 0)
         {

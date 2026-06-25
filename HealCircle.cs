@@ -9,7 +9,6 @@ public class HealCircle : MonoBehaviour
 
     private int healingCount = 5;
     private int recovery = 0;
-    private float healDuration = 4f;
 
     private void Start()
     {

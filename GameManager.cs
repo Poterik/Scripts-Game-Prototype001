@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
         {
             if (player.currentHealth <= cost) return false;
             player.UpdateHealth(-cost);
-            cursedBoxCost += gameDifferent * 2;
+            cursedBoxCost += gameDifferent;
         }
         else
         {
@@ -240,6 +240,8 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
+            if (gameDifferent < 15) yield return new WaitForSeconds(60f);
+
             Instantiate(healCircle, SetRandomPosition(rangeSpawn / 3), Quaternion.identity)
                 .GetComponent<HealCircle>()
                 .SetLifeTime(duration);
