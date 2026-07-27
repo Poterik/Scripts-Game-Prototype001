@@ -1,11 +1,16 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class DropLaser : MonoBehaviour
 {
     private bool isDealingDamage;
     private Coroutine damageRoutine;
     private PlayerFighter fighter;
+    public AudioMixerGroup sfxMixer;
+    private AudioSource source1;
+    private AudioSource source2;
+    public AudioClip laserSound;
 
     private int damage;
 
@@ -16,7 +21,9 @@ public class DropLaser : MonoBehaviour
 
         damage = fighter.maxHealth / 25;
 
-        Destroy(gameObject, 5f);
+        SourceInitilize();
+
+        Destroy(gameObject, 4f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,6 +40,26 @@ public class DropLaser : MonoBehaviour
 
         isDealingDamage = false;
         if (damageRoutine != null) StopCoroutine(damageRoutine);
+    }
+
+    private void SourceInitilize()
+    {
+        source1 = GetComponent<AudioSource>();
+        source2 = gameObject.AddComponent<AudioSource>();
+
+        AudioSource[] sources = { source1, source2 };
+
+        for (int i = 0; i < sources.Length; i++)
+        {
+            sources[i].loop = true;
+            sources[i].spatialBlend = 1f;
+            sources[i].generator = laserSound;
+            if (sfxMixer != null) sources[i].outputAudioMixerGroup = sfxMixer;
+            else Debug.LogWarning("SFX not found!");
+        }
+
+        source1.Play();
+        source2.PlayDelayed(0.25f);
     }
 
     private IEnumerator DamagePerSecond()

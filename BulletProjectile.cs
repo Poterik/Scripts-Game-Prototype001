@@ -7,6 +7,8 @@ public class BulletProjectile : MonoBehaviour
 
     [SerializeField]
     public GameObject damageTextPrefab;
+    public AudioClip bulletRicochetSound;
+    public AudioClip[] bulletTouchSound;
     
     [Header("Settings Manager")]
     private float speed;
@@ -18,6 +20,7 @@ public class BulletProjectile : MonoBehaviour
     private float critDamage;
 
     private Rigidbody rb;
+    private AudioSource audioSource;
 
     private void Start()
     {
@@ -31,6 +34,7 @@ public class BulletProjectile : MonoBehaviour
         critChance = GameManager.Instance.critChance;
         critDamage = GameManager.Instance.critDamage;
 
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -67,6 +71,8 @@ public class BulletProjectile : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Enemy")) return;
+
+        audioSource.PlayOneShot(bulletTouchSound[Random.Range(0, bulletTouchSound.Length)]);
 
         EnemysAI eai = other.GetComponent<EnemysAI>();
         if (eai == null) return;
@@ -161,12 +167,13 @@ public class BulletProjectile : MonoBehaviour
         }
         if (newTarget != null)
         {
+            //audioSource.PlayOneShot(bulletRicochetSound);
             SetTarget(newTarget);
             StartCoroutine(ResetCollide());
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(gameObject, 0.2f);
         }
     }
 

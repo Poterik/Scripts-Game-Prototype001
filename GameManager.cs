@@ -3,12 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Sound")]
+    public AudioMixerGroup sfxGroup;
+    public AudioClip[] moneySounds;
+    private AudioSource audioSource;
+    public AudioClip[] slimeAttackSound;
+
     [Header("Economy")]
     public TextMeshProUGUI moneyDisplay;
     private int money = 0;
@@ -69,6 +76,8 @@ public class GameManager : MonoBehaviour
             return; 
         }
 
+        audioSource = GetComponent<AudioSource>();
+        audioSource.spatialBlend = 0.5f;
         Application.runInBackground = true;
     }
 
@@ -162,7 +171,11 @@ public class GameManager : MonoBehaviour
         //int getMoney = bounty + (gameDifferent - 1) * 2;
         money += bounty;
         moneyDisplay.text = $"{money:N0}$";
-        if (bounty > 0) UpgradeStatistics.Instance.RecordEndStatistic("Money", bounty);
+        if (bounty > 0) 
+        { 
+            UpgradeStatistics.Instance.RecordEndStatistic("Money", bounty);
+            audioSource.PlayOneShot(moneySounds[Random.Range(0, moneySounds.Length)], 0.6f);
+        }
         Instantiate(moneyPrefab, player.transform.position + Vector3.right * 1.25f, Quaternion.identity)
             .GetComponent<DamagePopup>()
             .SetName($"{bounty}$");
@@ -240,7 +253,7 @@ public class GameManager : MonoBehaviour
     {
         while (true)
         {
-            if (gameDifferent < 15) yield return new WaitForSeconds(60f);
+            while (gameDifferent < 15) yield return new WaitForSeconds(10f);
 
             Instantiate(healCircle, SetRandomPosition(rangeSpawn / 3), Quaternion.identity)
                 .GetComponent<HealCircle>()
@@ -362,5 +375,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.settingAddon.SetActive(false);
         UpgradeStatistics.Instance.ShowEndStatistic();
         UIManager.Instance.UpdateGameState(true);
+        AudioManager.Instance.mixer.SetFloat("SFXVolume", -80f);
+        AudioManager.Instance.PlayGameOverSound();
     }
 }

@@ -92,7 +92,6 @@ public class UIManager : MonoBehaviour
 
         //bool willOpen = !settingAddon.activeSelf;
         bool willOpen = !escapeMenuAddon.activeSelf;
-        Debug.Log("ToggleSetting status: " + willOpen);
         settingAddon.SetActive(willOpen);
         escapeMenuAddon.SetActive(willOpen);
     }

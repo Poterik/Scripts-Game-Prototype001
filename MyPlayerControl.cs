@@ -5,6 +5,13 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(CharacterController))]
 public class MyPlayerControl : MonoBehaviour
 {
+    [Header("Sound")]
+    public AudioClip jumpSound;
+    public AudioClip touchGroundSound;
+    private AudioSource audioSource;
+    private float timeInAir = 0f;
+    private float minJumpTime = 0.15f;
+
     [Header("Movement")]
     public float moveSpeed = 10f;
     //public float sprintSpeed = 10f;
@@ -33,6 +40,7 @@ public class MyPlayerControl : MonoBehaviour
 
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         controller = GetComponent<CharacterController>();
         inputActions = new PlayerInputActions();
         playerCamera = Camera.main.transform;
@@ -44,6 +52,7 @@ public class MyPlayerControl : MonoBehaviour
     private void Update()
     {
         HandleMovement();
+        CheckLanding();
     }
 
     private void LateUpdate()
@@ -51,6 +60,14 @@ public class MyPlayerControl : MonoBehaviour
         if (isMenu) return;
 
         HandleOrbit();
+    }
+
+    private void CheckLanding()
+    {
+        if (controller.isGrounded && timeInAir > minJumpTime)
+            audioSource.PlayOneShot(touchGroundSound, 0.6f);
+
+        timeInAir = controller.isGrounded ? 0f : timeInAir + Time.deltaTime;
     }
 
     private void HandleOrbit()
@@ -112,6 +129,7 @@ public class MyPlayerControl : MonoBehaviour
     {
         if (context.performed && controller.isGrounded)
         {
+            audioSource.PlayOneShot(jumpSound);
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y);
         }
     }

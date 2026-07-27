@@ -24,6 +24,10 @@ public class UpgradeManager : MonoBehaviour
     [Header("Settings")]
     public int upgradesToShow = 3;
 
+    [Header("Sound")]
+    private AudioSource audioSource;
+    public AudioClip upgradeSound;
+
     private MyPlayerControl player;
 
     private void Awake()
@@ -32,6 +36,8 @@ public class UpgradeManager : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start()
@@ -94,6 +100,7 @@ public class UpgradeManager : MonoBehaviour
 
     private void ShowWindow()
     {
+        audioSource.PlayOneShot(upgradeSound);
         upgradeWindow.SetActive(true);
         ShowUpgrades();
 

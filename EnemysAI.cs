@@ -10,6 +10,8 @@ public class EnemysAI : MonoBehaviour
     protected Animator animator;
     protected Rigidbody rb;
     private SphereCollider collide;
+    protected AudioSource audioSource;
+    protected AudioClip[] attackSound;
 
     [Header("Fight")]
     public float attackCD = 2.5f;
@@ -26,6 +28,15 @@ public class EnemysAI : MonoBehaviour
     public float speed = 3;
     private float saveSpeed;
     public float stoppingDistance = 1.3f;  //1.3
+
+    protected void Awake()
+    {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.outputAudioMixerGroup = GameManager.Instance.sfxGroup;
+        audioSource.spatialBlend = 1f;
+        attackSound = GameManager.Instance.slimeAttackSound;
+    }
 
     protected virtual void Start()
     {
@@ -88,13 +99,10 @@ public class EnemysAI : MonoBehaviour
 
     protected void NewHandleAttack()
     {
-        //if (!canAttack) return;
-
-        //isAttacking = false;
+        audioSource.PlayOneShot(attackSound[Random.Range(0, attackSound.Length)]);
         PlayerFighter pf = player.GetComponent<PlayerFighter>();
         if (pf != null) pf.UpdateHealth(-damage);
         animator.SetTrigger("Attack");
-        //StartCoroutine(AttackCooldown());
     }
 
     protected IEnumerator AttackCooldown()

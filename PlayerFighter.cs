@@ -25,7 +25,6 @@ public class PlayerFighter : MonoBehaviour
     [Header("References")]
     public GameObject healAura;
 
-
     private void Start()
     {
         controller = GetComponent<MyPlayerControl>();
@@ -45,7 +44,7 @@ public class PlayerFighter : MonoBehaviour
         StartCoroutine(RegenerateHealth());
     }
 
-    public IEnumerator SpeedDebuff(int amount = 2, float duration = 15f)
+    public IEnumerator SpeedDebuff(int amount = 1, float duration = 15f)
     {
         if (controller == null) yield break;
 

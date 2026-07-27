@@ -95,7 +95,6 @@ public class BossAI : EnemysAI
         //if (!TryUseAttack(BossState.Crystals)) return;
 
         Instantiate(crystalsArea, transform.position, Quaternion.identity);
-        Debug.Log("Used Crystals Area");
 
         allUsedCooldownPool[BossState.CrystalsArea] = Time.time + crystalsAreaCooldown;
     }

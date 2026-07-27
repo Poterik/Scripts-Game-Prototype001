@@ -6,6 +6,9 @@ public class DelayedExplosion : MonoBehaviour
     private Collider collide;
     private GameManager gameManager;
     private PlayerFighter fighter;
+    private AudioSource audioSource;
+    public AudioClip explosionSound;
+    public AudioClip startExplosionSound;
 
     private float timeToActivate = 1f;
     private int damage; //10
@@ -13,6 +16,8 @@ public class DelayedExplosion : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(startExplosionSound, 0.65f);
         gameManager = GameManager.Instance;
         collide = GetComponent<Collider>();
         fighter = gameManager.player;
@@ -38,10 +43,11 @@ public class DelayedExplosion : MonoBehaviour
     {
         yield return new WaitForSeconds(timeToActivate);
 
+        audioSource.PlayOneShot(explosionSound, 1f);
         collide.enabled = true;
 
         yield return new WaitForSeconds(timeToActivate / 5);
 
-        Destroy(this.gameObject);
+        Destroy(this.gameObject, 0.2f);
     }
 }

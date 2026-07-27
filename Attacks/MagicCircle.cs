@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class MagicCircle : MonoBehaviour
@@ -5,6 +6,9 @@ public class MagicCircle : MonoBehaviour
     [Header("References")]
     private GameManager gameManager;
     private PlayerFighter fighter;
+    private AudioSource audioSource;
+    public AudioClip circleSound;
+    public AudioClip[] circleTouch;
 
     [Header("Settings")]
     private float scale;
@@ -15,9 +19,12 @@ public class MagicCircle : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.Instance;
         fighter = gameManager.player;
         damage *= gameManager.gameDifferent;
+
+        StartCoroutine(SwapSound());
 
         Destroy(this.gameObject, lifetime);
     }
@@ -28,8 +35,18 @@ public class MagicCircle : MonoBehaviour
 
         hasAttacking = true;
 
+        audioSource.PlayOneShot(circleTouch[Random.Range(0, circleTouch.Length)]);
+
         //fighter.UpdateHealth(Mathf.RoundToInt(-damage));
         fighter.UpdateHealth(-fighter.maxHealth / 5);
+    }
+
+    private IEnumerator SwapSound()
+    {
+        yield return new WaitForSeconds(1f);
+        audioSource.loop = true;
+        audioSource.generator = circleSound;
+        audioSource.Play();
     }
 
     private void Update()
