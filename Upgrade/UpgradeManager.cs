@@ -46,7 +46,7 @@ public class UpgradeManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<MyPlayerControl>();
     }
 
-    private void Update()
+    /*private void Update()
     {
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
@@ -55,7 +55,7 @@ public class UpgradeManager : MonoBehaviour
             ShowRandomUpgrades(cursedUpgrades);
             //ApplyAllUpgrades();
         }
-    }
+    }*/
 
     public void ShowRandomUpgrades(List<UpgradeData> upgrades)
     {
