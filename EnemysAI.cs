@@ -55,7 +55,12 @@ public class EnemysAI : MonoBehaviour
         health = baseHealth * (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent);
         //damage = baseDamage + GameManager.Instance.gameDifferent * 2;
         //damage = baseDamage + (GameManager.Instance.gameDifferent * GameManager.Instance.gameDifferent) / 2;
-        damage = GameManager.Instance.player.maxHealth / damageDivider;
+        //damage = GameManager.Instance.player.maxHealth / damageDivider;
+
+        float difficultyMultiplier = 1f + (GameManager.Instance.gameDifferent * 0.25f);
+        //damage = Mathf.RoundToInt(baseDamage * difficultyMultiplier);
+        float maxDamage = GameManager.Instance.player.maxHealth * 0.9f;
+        damage = Mathf.RoundToInt(Mathf.Min(baseDamage * difficultyMultiplier, maxDamage));
         //speed = speed + GameManager.Instance.gameDifferent * 0.25f;
         saveSpeed = speed;
     }

@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
     //Story
     public TextMeshProUGUI newStoryText;
     public GameObject storyPrefab;
+    public GameObject stationPrefab;
 
     public static GameManager Instance;
 
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(TrackPlayTime());
         StartCoroutine(SpawnHealCircle());
+        StartCoroutine(SpawnStation());
     }
 
     private void FindNearbyLootBox()
@@ -187,6 +189,17 @@ public class GameManager : MonoBehaviour
         {
             lifetime += 1;
             UpgradeStatistics.Instance.RecordEndStatistic("Lifetime Mins", 1);
+            yield return new WaitForSeconds(60f);
+        }
+    }
+
+    private IEnumerator SpawnStation()
+    {
+        while (true && !gameOver)
+        {
+            if (gameDifferent < 20) yield return new WaitForSeconds(5f);
+
+            Instantiate(stationPrefab, SetRandomPosition(rangeSpawn / 3f), Quaternion.identity);
             yield return new WaitForSeconds(60f);
         }
     }
