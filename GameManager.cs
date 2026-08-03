@@ -109,6 +109,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(TrackPlayTime());
         StartCoroutine(SpawnHealCircle());
         StartCoroutine(SpawnStation());
+        StartCoroutine(PassiveMoneyIncome());
     }
 
     private void FindNearbyLootBox()
@@ -181,6 +182,15 @@ public class GameManager : MonoBehaviour
         Instantiate(moneyPrefab, player.transform.position + Vector3.right * 1.25f, Quaternion.identity)
             .GetComponent<DamagePopup>()
             .SetName($"{bounty}$");
+    }
+
+    private IEnumerator PassiveMoneyIncome()
+    {
+        while (!gameOver)
+        {
+            UpdateMoney(gameDifferent);
+            yield return new WaitForSeconds(10f);
+        }
     }
 
     private IEnumerator TrackPlayTime()
