@@ -8,6 +8,10 @@ public class PlayerFighter : MonoBehaviour
 {
     private MyPlayerControl controller;
 
+    [Header("Sound")]
+    private AudioSource audioSource;
+    public AudioClip[] bulletShotClips;
+
     [Header("Health")]
     private Slider healthBar;
     public int maxHealth = 100;
@@ -27,6 +31,8 @@ public class PlayerFighter : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         controller = GetComponent<MyPlayerControl>();
 
         healthBar = GetComponentInChildren<Slider>();
@@ -117,6 +123,7 @@ public class PlayerFighter : MonoBehaviour
         //Vector3 distance = transform.position - this.transform.position;
         GameObject bullet = Instantiate(bulletPrefab, this.transform.position + Vector3.forward, Quaternion.identity);
         BulletProjectile bp = bullet.GetComponent<BulletProjectile>();
+        audioSource.PlayOneShot(bulletShotClips[Random.Range(0, bulletShotClips.Length)]);
         bp.SetTarget(transform);
     }
 

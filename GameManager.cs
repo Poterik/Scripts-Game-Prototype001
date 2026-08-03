@@ -197,7 +197,11 @@ public class GameManager : MonoBehaviour
     {
         while (true && !gameOver)
         {
-            if (gameDifferent < 20) yield return new WaitForSeconds(5f);
+            if (gameDifferent < 20)
+            {
+                yield return new WaitForSeconds(5f);
+                continue;
+            }
 
             Instantiate(stationPrefab, SetRandomPosition(rangeSpawn / 3f), Quaternion.identity);
             yield return new WaitForSeconds(60f);

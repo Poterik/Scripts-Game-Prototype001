@@ -226,7 +226,7 @@ public class BossAI : EnemysAI
         if (isDead) return;
 
         //base.UpdateHealth(value);
-        int damage = value / (2 + gameManager.gameDifferent / 10);
+        int damage = value / (gameManager.gameDifferent / 5);
         health += damage;
         bossHealthSlider.value = health;
 

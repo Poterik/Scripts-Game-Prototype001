@@ -116,7 +116,7 @@ public class AudioManager : MonoBehaviour
         /*mainSource.clip = gameOverClip;
         mainSource.Play();*/
         mainSource.Stop();
-        sfxSource.PlayOneShot(gameOverClip);
+        mainSource.PlayOneShot(gameOverClip);
     }
 
     public void OnButtonPoint() => sfxSource.PlayOneShot(buttonPointSound);
