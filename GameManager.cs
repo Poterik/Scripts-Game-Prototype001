@@ -186,6 +186,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator PassiveMoneyIncome()
     {
+        yield return new WaitForSeconds(10f);
+
         while (!gameOver)
         {
             UpdateMoney(gameDifferent);

@@ -5,6 +5,7 @@ using System;
 public class UpgradeInitializer : MonoBehaviour
 {
     private GameManager gameManager;
+    private AbilityManager abilityManager;
 
     private void Start()
     {
@@ -15,13 +16,21 @@ public class UpgradeInitializer : MonoBehaviour
             Debug.LogError("UpgradeSystem not found!");
             return;
         }
+        abilityManager = gameManager.player.GetComponent<AbilityManager>();
+        if (abilityManager == null)
+        {
+            Debug.LogError("AbilityManager not found!");
+            return;
+        }
 
         InitializeUpgrades(upgradeManager);
     }
 
     private void InitializeUpgrades(UpgradeManager manager)
     {
-        //Default Upgrades
+        //
+        //----Default Upgrades----
+        //
         Bind("Ricochette", u => GameManager.Instance.bulletRicochet += u.bonus, manager.allUpgrades);
         Bind("Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.allUpgrades);
         //Bind("Health Point", u => GameManager.Instance.player?.UpdateMaxHealth(u.bonus), manager.allUpgrades);
@@ -51,7 +60,9 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Recover", u => gameManager.recovery += u.bonus, manager.allUpgrades);
         //Bind("Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.allUpgrades);
 
-        //Legendary Upgrades
+        //
+        //----Legendary Upgrades----
+        //
         Bind("Extra Damage", u => GameManager.Instance.bulletDamage += u.bonus, manager.legendaryUpgrades);
         Bind("Extra HP", u => GameManager.Instance.player?.UpdateMaxHealth(u.bonus), manager.legendaryUpgrades);
         Bind("Extra Ricochette", u => GameManager.Instance.bulletRicochet += u.bonus, manager.legendaryUpgrades);
@@ -81,7 +92,9 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Extra Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.legendaryUpgrades);
         Bind("Extra Regenerator", u => gameManager.player.regeneration += u.bonus, manager.legendaryUpgrades);
 
-        //Cursed Upgrades
+        //
+        //----Cursed Upgrades----
+        //
         Bind("Cursed Damage", u => gameManager.bulletDamage += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Health", u => gameManager.player.UpdateMaxHealth(u.bonus), manager.cursedUpgrades);
         Bind("Cursed Ricochette", u => gameManager.bulletRicochet += u.bonus, manager.cursedUpgrades);
@@ -97,6 +110,11 @@ public class UpgradeInitializer : MonoBehaviour
                 gameManager.player.DecreaseSearchDelay();
             }
         }, manager.cursedUpgrades);*/
+
+        //
+        //----Abilities Upgrade----
+        //
+        Bind("Fire Circle", u => abilityManager.ApplyUpgrade("Fire Circle", u.bonus), manager.abilitiesUpgrades);
 
         Debug.Log("✓ Upgrades initialized");
     }

@@ -36,19 +36,17 @@ public class BossAI : EnemysAI
 
     protected override void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-        gameManager = GameManager.Instance;
-        player = FindAnyObjectByType<PlayerFighter>().GetComponent<Transform>();
-        bossHealthSlider = gameManager.bossHealthSlider;
+        base.Start();
 
+        gameManager = GameManager.Instance;
+
+        bossHealthSlider = gameManager.bossHealthSlider;
         bossHealthSlider.gameObject.SetActive(true);
-        baseHealth *= gameManager.gameDifferent * 2;
-        bossHealthSlider.maxValue = baseHealth;
-        health = baseHealth;
+        bossHealthSlider.maxValue = health;
         bossHealthSlider.value = health;
-        damage = baseDamage;
         expForDead *= 10;
+
+        Debug.Log($"Current boss stats: Health - {health}, Slider max value - {bossHealthSlider.maxValue}, Slider value - {bossHealthSlider.value}");
 
         lastUsedCooldown = Time.time + waitStateCooldown;
     }
@@ -226,7 +224,7 @@ public class BossAI : EnemysAI
         if (isDead) return;
 
         //base.UpdateHealth(value);
-        int damage = value / (gameManager.gameDifferent / 5);
+        int damage = value / Mathf.Max(1, gameManager.gameDifferent / 2);
         health += damage;
         bossHealthSlider.value = health;
 

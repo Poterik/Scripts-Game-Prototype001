@@ -8,6 +8,7 @@ public class StationTower : MonoBehaviour
     private int maxCapture = 5;
     private float currentCapture;
     private bool isCaptured;
+    private float lifetime = 300f;
 
     [Header("References")]
     public Slider slider;
@@ -23,6 +24,7 @@ public class StationTower : MonoBehaviour
         }
 
         upgradeManager = UpgradeManager.Instance;
+        Destroy(gameObject, lifetime);
     }
 
     private void Update()
@@ -57,14 +59,11 @@ public class StationTower : MonoBehaviour
         int rand = Random.Range(0, 10);
         switch (rand)
         {
-            /*case < 1:
-                upgradeManager.ShowRandomUpgrades(upgradeManager.cursedUpgrades);
-                break;*/
-            case < 2:
+            /*case < 2:
                 upgradeManager.ShowRandomUpgrades(upgradeManager.legendaryUpgrades);
-                break;
+                break;*/
             default:
-                upgradeManager.ShowRandomUpgrades(upgradeManager.allUpgrades);
+                upgradeManager.ShowRandomUpgrades(upgradeManager.abilitiesUpgrades);
                 break;
         }
     }

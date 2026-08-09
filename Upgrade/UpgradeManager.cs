@@ -18,6 +18,7 @@ public class UpgradeManager : MonoBehaviour
     public List<UpgradeData> allUpgrades = new List<UpgradeData>();
     public List<UpgradeData> legendaryUpgrades = new List<UpgradeData>();
     public List<UpgradeData> cursedUpgrades = new List<UpgradeData>();
+    public List<UpgradeData> abilitiesUpgrades = new List<UpgradeData>();
     private List<UpgradeData> currentUpgrades = new List<UpgradeData>();
     private List<Button> upgradeButtons = new List<Button>();
 
