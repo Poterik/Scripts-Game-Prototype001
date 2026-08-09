@@ -28,6 +28,8 @@ public class EnemysAI : MonoBehaviour
     public float speed = 3;
     private float saveSpeed;
     public float stoppingDistance = 1.3f;  //1.3
+    private float startDifficulty = 0.2f;
+    private float endDifficulty = 0.6f;
 
     protected void Awake()
     {
@@ -50,13 +52,14 @@ public class EnemysAI : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        health = Mathf.RoundToInt(baseHealth * Mathf.Pow(1f + GameManager.Instance.gameDifferent * 0.4f, 3f));
+        //health = Mathf.RoundToInt(baseHealth * Mathf.Pow(1f + GameManager.Instance.gameDifferent * 0.4f, 3f));
+        float k = Mathf.Lerp(startDifficulty, endDifficulty, GameManager.Instance.gameDifferent / 100f);
+        health = Mathf.RoundToInt(baseHealth * Mathf.Pow(1f + GameManager.Instance.gameDifferent * k, 3f));
 
         float difficultyMultiplier = 1f + (GameManager.Instance.gameDifferent * 0.15f);
         //damage = Mathf.RoundToInt(baseDamage * difficultyMultiplier);
         float maxDamage = GameManager.Instance.player.maxHealth * 0.9f;
         damage = Mathf.RoundToInt(Mathf.Min(baseDamage * difficultyMultiplier, maxDamage));
-        Debug.Log("Enemy damage: " + damage);
     }
 
     protected virtual void FixedUpdate()
