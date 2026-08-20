@@ -11,10 +11,11 @@ public class FireAttack : MonoBehaviour
     private float tickInterval = 1f;
     private float nextTickTime;
     private int damage;
+    private float fireMultiple = 1f;
 
     [Header("Circle Setting")]
     private float growSpeed = 1f;
-    private float rotateSpeed = 45f;
+    //private float rotateSpeed = 45f;
 
     private void Start()
     {
@@ -40,11 +41,15 @@ public class FireAttack : MonoBehaviour
                 continue;
             }
 
-            enemys[i].UpdateHealth(-Mathf.RoundToInt(damage / 10f));
+            enemys[i].UpdateHealth(-Mathf.RoundToInt((damage / 10f) * fireMultiple));
             hitAny = true;
         }
 
-        if (hitAny) audioSource.PlayOneShot(impactClips[Random.Range(0, impactClips.Length)]);
+        if (hitAny)
+        {
+            audioSource.PlayOneShot(impactClips[Random.Range(0, impactClips.Length)]);
+            fireMultiple += 0.1f;
+        }
         nextTickTime = Time.time + tickInterval;
     }
 

@@ -78,7 +78,8 @@ public class BulletProjectile : MonoBehaviour
         if (eai == null) return;
 
         float damageMultipler = Random.value < critChance ? 2 + critDamage : 1;
-        int totalDamage = Mathf.RoundToInt(damage * damageMultipler);
+        float vulnerability = eai.vulnerability;
+        int totalDamage = Mathf.RoundToInt(damage * damageMultipler * vulnerability);
 
         eai.UpdateHealth(-totalDamage);
         SpawnDamageText(-totalDamage, Mathf.RoundToInt(damageMultipler));

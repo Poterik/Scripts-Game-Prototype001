@@ -4,6 +4,12 @@ using UnityEngine;
 public class AbilityManager : MonoBehaviour
 {
     public List<AbilityData> abilities = new List<AbilityData>();
+    private UpgradeManager upgradeManager;
+
+    private void Start()
+    {
+        upgradeManager = UpgradeManager.Instance;
+    }
 
     private void Update()
     {
@@ -36,10 +42,21 @@ public class AbilityManager : MonoBehaviour
     public void ApplyUpgrade(string name, float bonus)
     {
         var a = GetAbility(name);
-        if (a == null) Debug.LogWarning("Abilities not found!");
+        if (a == null)
+        {
+            Debug.LogWarning($"Ability {name} not found!");
+            return;
+        }
 
-        if (a.isActive) a.cooldown = Mathf.Max(1, a.cooldown - bonus);
+        if (a.isActive) DecreaseAbilityAndDelete(a, bonus);
         else a.isActive = true;
+    }
+
+    private void DecreaseAbilityAndDelete(AbilityData ability, float bonus, int minCooldown = 10)
+    {
+        ability.cooldown = Mathf.Max(minCooldown, ability.cooldown - bonus);
+        if (ability.cooldown <= minCooldown) 
+            upgradeManager.abilitiesUpgrades.Remove(upgradeManager.abilitiesUpgrades.Find(a => a.name == ability.abilityName));
     }
 }
 

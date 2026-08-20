@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private int money = 0;
     public GameObject moneyPrefab;
     public int lootBoxCost;
-    public int cursedBoxCost = 75;
+    public int cursedBoxCost = 25;
     private float radiusLootBoxSearch = 2f;
 
     [Header("References")]

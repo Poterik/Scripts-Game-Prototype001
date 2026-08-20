@@ -16,7 +16,7 @@ public class EnemysAI : MonoBehaviour
     [Header("Fight")]
     public float attackCD = 2.5f;
     public int baseHealth = 100;
-    protected int health;
+    public int health;
     public int baseDamage = 10;
     protected int damage;
     public int damageDivider;
@@ -26,10 +26,17 @@ public class EnemysAI : MonoBehaviour
     protected int expForDead = 50;
     public int bounty = 5;
     public float speed = 3;
-    private float saveSpeed;
     public float stoppingDistance = 1.3f;  //1.3
     private float startDifficulty = 0.2f;
     private float endDifficulty = 0.6f;
+
+    [Header("Ice")]
+    private float slowMultiplier = 1f;
+    private float slowTimer = 0f;
+
+    [Header("Toxic")]
+    public float vulnerability = 1f;
+    private float toxicTimer = 0f;
 
     protected void Awake()
     {
@@ -66,6 +73,7 @@ public class EnemysAI : MonoBehaviour
     {
         if (isDead || GameManager.Instance.gameOver) return;
 
+        HandleSlowIce();
         NewHandleMovement();
         //HandleAcceleration();
         //NewAcceleration();
@@ -86,6 +94,44 @@ public class EnemysAI : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             isColliding = false;
+        }
+    }
+
+    public void ApplyToxic(float multiple = 0.2f, float duration = 10f)
+    {
+        vulnerability += multiple;
+        toxicTimer += duration;
+    }
+
+    protected void HandleToxicTime()
+    {
+        if (toxicTimer > 0)
+        {
+            toxicTimer -= Time.deltaTime;
+            if (toxicTimer <= 0)
+            {
+                vulnerability = 1f;
+            }
+        }
+    }
+
+    public void ApplySlow(float multiplier = 0.1f, float duration = 5f)
+    {
+        slowMultiplier -= multiplier;
+        slowTimer += duration;
+        Debug.Log("Enemys: slow has been appled");
+    }
+
+    protected void HandleSlowIce()
+    {
+        if (slowTimer > 0)
+        {
+            slowTimer -= Time.deltaTime;
+            if (slowTimer <= 0)
+            {
+                slowMultiplier = 1f;
+                Debug.Log("Enemys: slow has been canceled");
+            }
         }
     }
 
@@ -120,6 +166,8 @@ public class EnemysAI : MonoBehaviour
 
     protected void NewHandleMovement()
     {
+        float currentSpeed = speed * slowMultiplier;
+
         Vector3 direction = player.position - transform.position;
         direction.y = 0;
         float distance = direction.magnitude;
@@ -129,7 +177,7 @@ public class EnemysAI : MonoBehaviour
 
         direction.Normalize();
 
-        rb.linearVelocity = new Vector3(direction.x * speed, rb.linearVelocity.y, direction.z * speed);
+        rb.linearVelocity = new Vector3(direction.x * currentSpeed, rb.linearVelocity.y, direction.z * currentSpeed);
         transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
     }
 

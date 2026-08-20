@@ -47,16 +47,17 @@ public class UpgradeManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<MyPlayerControl>();
     }
 
-    /*private void Update()
+    private void Update()
     {
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
             //ShowRandomUpgrades(allUpgrades);
             //ShowRandomUpgrades(legendaryUpgrades);
-            ShowRandomUpgrades(cursedUpgrades);
+            //ShowRandomUpgrades(cursedUpgrades);
+            ShowRandomUpgrades(abilitiesUpgrades);
             //ApplyAllUpgrades();
         }
-    }*/
+    }
 
     public void ShowRandomUpgrades(List<UpgradeData> upgrades)
     {

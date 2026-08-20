@@ -18,6 +18,7 @@ public class PlayerFighter : MonoBehaviour
     public int currentHealth;
     public TextMeshProUGUI currentHealthText;
     public int regeneration = 5;
+    public float regenCooldown = 7.5f;
     public bool isHealing;
 
     [Header("Fight")]
@@ -68,7 +69,7 @@ public class PlayerFighter : MonoBehaviour
         while (true)
         {
             if (CheckHealth()) { UpdateHealth(regeneration + GameManager.Instance.recovery); StartCoroutine(ShowHealAura()); }
-            yield return new WaitForSeconds(7.5f);
+            yield return new WaitForSeconds(regenCooldown);
         }
     }
 

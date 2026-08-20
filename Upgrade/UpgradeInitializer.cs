@@ -115,6 +115,10 @@ public class UpgradeInitializer : MonoBehaviour
         //----Abilities Upgrade----
         //
         Bind("Fire Circle", u => abilityManager.ApplyUpgrade("Fire Circle", u.bonus), manager.abilitiesUpgrades);
+        Bind("Light Circle", u => abilityManager.ApplyUpgrade("Light Circle", u.bonus), manager.abilitiesUpgrades);
+        Bind("Aura Buffer", u => abilityManager.ApplyUpgrade("Aura Buffer", u.bonus), manager.abilitiesUpgrades);
+        Bind("Ice Flakes", u => abilityManager.ApplyUpgrade("Ice Flakes", u.bonus), manager.abilitiesUpgrades);
+        Bind("Toxic Cloud", u => abilityManager.ApplyUpgrade("Toxic Cloud", u.bonus), manager.abilitiesUpgrades);
 
         Debug.Log("✓ Upgrades initialized");
     }
