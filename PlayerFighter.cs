@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerFighter : MonoBehaviour
 {
-    private MyPlayerControl controller;
-
     [Header("Sound")]
     private AudioSource audioSource;
     public AudioClip[] bulletShotClips;
@@ -34,8 +32,6 @@ public class PlayerFighter : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
 
-        controller = GetComponent<MyPlayerControl>();
-
         healthBar = GetComponentInChildren<Slider>();
         if (healthBar != null)
         {
@@ -49,19 +45,6 @@ public class PlayerFighter : MonoBehaviour
 
         StartCoroutine(FindEnemys());
         StartCoroutine(RegenerateHealth());
-    }
-
-    public IEnumerator SpeedDebuff(int amount = 1, float duration = 15f)
-    {
-        if (controller == null) yield break;
-
-        controller.moveSpeed = Mathf.Max(0, controller.moveSpeed - amount);
-        Debug.Log("Apply speed debuff: " + controller.moveSpeed);
-
-        yield return new WaitForSeconds(duration);
-
-        controller.moveSpeed += amount;
-        Debug.Log("Remove speed debuff: " + controller.moveSpeed);
     }
 
     private IEnumerator RegenerateHealth()

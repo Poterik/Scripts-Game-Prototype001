@@ -15,14 +15,14 @@ public class MagicCircle : MonoBehaviour
     private bool hasAttacking;
     private float scaleMultiple = 1f;
     private float lifetime = 30f;
-    private float damage = 10;
+    private int damage;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.Instance;
         fighter = gameManager.player;
-        damage *= gameManager.gameDifferent;
+        damage = Mathf.RoundToInt(3f * GameManager.Instance.gameDifferent);
 
         StartCoroutine(SwapSound());
 
@@ -54,7 +54,6 @@ public class MagicCircle : MonoBehaviour
         scale += Time.deltaTime * scaleMultiple;
         transform.localScale = new Vector3(scale, 5f, scale);
 
-        damage += Time.deltaTime;
         scaleMultiple += Time.deltaTime;
     }
 }

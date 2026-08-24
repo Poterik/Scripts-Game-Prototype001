@@ -21,10 +21,10 @@ public class BossAI : EnemysAI
     private float circleCooldown = 30f;
     private float explosionCooldown = 15f;
     private float perExplosionCooldown = 0.5f;
-    private float laserCooldown = 10f;
+    private float laserCooldown = 20;
     private float crystalsCooldown = 30f;
-    private float waitStateCooldown = 2.5f;
-    private float crystalsAreaCooldown = 2.5f;
+    private float waitStateCooldown = 7.5f;
+    private float crystalsAreaCooldown = 5f;
 
     //[Header("Attack Settings")]
 

@@ -24,7 +24,7 @@ public class StationTower : MonoBehaviour
         }
 
         upgradeManager = UpgradeManager.Instance;
-        Destroy(gameObject, lifetime);
+        //Destroy(gameObject, lifetime);
     }
 
     private void Update()

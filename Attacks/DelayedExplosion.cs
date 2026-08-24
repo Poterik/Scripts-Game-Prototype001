@@ -24,7 +24,7 @@ public class DelayedExplosion : MonoBehaviour
 
         collide.enabled = false;
         //damage *= gameManager.gameDifferent;
-        damage = fighter.maxHealth / 10;
+        damage = Mathf.RoundToInt(2f * GameManager.Instance.gameDifferent);
 
         StartCoroutine(ActivateCollider());
     }

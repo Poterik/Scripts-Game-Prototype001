@@ -14,6 +14,8 @@ public class MyPlayerControl : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 10f;
+    private float speedMultiplier = 1f;
+    private float slowTime = 0f;
     //public float sprintSpeed = 10f;
     public float jumpHeight = 2f;
     public float rotationSpeed = 10f;
@@ -53,6 +55,7 @@ public class MyPlayerControl : MonoBehaviour
     {
         HandleMovement();
         CheckLanding();
+        HandleSlowDebuff();
     }
 
     private void LateUpdate()
@@ -104,10 +107,28 @@ public class MyPlayerControl : MonoBehaviour
         }
 
         //float speed = inputActions.Player.Sprint.IsPressed() ? sprintSpeed : moveSpeed;
-        Vector3 moveVelocity = worldDirection * moveSpeed;
+        Vector3 moveVelocity = worldDirection * moveSpeed * speedMultiplier;
 
         moveVelocity.y = verticalVelocity;
         controller.Move(moveVelocity * Time.deltaTime);
+    }
+
+    public void ApplySlowDebuf(float multiple = 0.1f, float duration = 7.5f)
+    {
+        speedMultiplier -= multiple;
+        slowTime += duration;
+    }
+
+    private void HandleSlowDebuff()
+    {
+        if (slowTime > 0)
+        {
+            slowTime -= Time.deltaTime;
+            if (slowTime <= 0)
+            {
+                speedMultiplier = 1f;
+            }
+        }
     }
 
     private void OnEnable()

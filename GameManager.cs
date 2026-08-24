@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
             }
 
             Instantiate(stationPrefab, SetRandomPosition(rangeSpawn / 3f), Quaternion.identity);
-            yield return new WaitForSeconds(60f);
+            yield return new WaitForSeconds(20f);
         }
     }
 
@@ -252,8 +252,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject GetEnemy()
     {
-        if (gameDifferent < 5) return enemyPrefab;
-        if (gameDifferent < 10) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
+        if (gameDifferent < 10) return enemyPrefab;
+        if (gameDifferent < 20) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
 
         int rand = Random.Range(0, 10);
         return rand switch

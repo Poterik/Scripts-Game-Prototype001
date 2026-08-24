@@ -4,6 +4,7 @@ using UnityEngine.Audio;
 
 public class CrystalsArea : MonoBehaviour
 {
+    private MyPlayerControl playerControl;
     private PlayerFighter fighter;
     private bool hasAttacked;
     private int damage;
@@ -25,8 +26,9 @@ public class CrystalsArea : MonoBehaviour
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        fighter = GameManager.Instance.player;
-        damage = fighter.maxHealth / 5;
+        playerControl = GameManager.Instance.player.GetComponent<MyPlayerControl>();
+        fighter = GameManager.Instance.player.GetComponent<PlayerFighter>();
+        damage = Mathf.RoundToInt(2.5f * GameManager.Instance.gameDifferent);
         StartCoroutine(PlaySoundPerSeconds());
     }
 
@@ -37,7 +39,7 @@ public class CrystalsArea : MonoBehaviour
         //hasAttacked = true;
         audioSource2.PlayOneShot(iceTouchSound);
         StartCoroutine(ToggleAttack());
-        StartCoroutine(fighter.SpeedDebuff());
+        playerControl.ApplySlowDebuf();
         fighter.UpdateHealth(-damage);
     }
 

@@ -13,7 +13,7 @@ public class AuraBuffer : MonoBehaviour
     private float oldSpeed;
     private float newSpeed = 15f;
     private float oldRegenTiming;
-    private float newRegenTiming = 0.5f;
+    private float newRegenTiming = 1.5f;
 
     private void Start()
     {

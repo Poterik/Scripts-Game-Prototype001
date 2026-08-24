@@ -19,7 +19,7 @@ public class DropLaser : MonoBehaviour
         fighter = GameManager.Instance.player;
         if (fighter == null) Debug.Log("Player not fouynd");
 
-        damage = fighter.maxHealth / 25;
+        damage = Mathf.RoundToInt(0.75f * GameManager.Instance.gameDifferent);
 
         SourceInitilize();
 

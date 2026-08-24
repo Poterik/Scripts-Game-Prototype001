@@ -27,7 +27,7 @@ public class EnemysAI : MonoBehaviour
     public int bounty = 5;
     public float speed = 3;
     public float stoppingDistance = 1.3f;  //1.3
-    private float startDifficulty = 0.2f;
+    private float startDifficulty = 0.3f;
     private float endDifficulty = 0.6f;
 
     [Header("Ice")]
@@ -74,6 +74,7 @@ public class EnemysAI : MonoBehaviour
         if (isDead || GameManager.Instance.gameOver) return;
 
         HandleSlowIce();
+        HandleToxicTime();
         NewHandleMovement();
         //HandleAcceleration();
         //NewAcceleration();
