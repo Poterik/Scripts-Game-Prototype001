@@ -28,7 +28,7 @@ public class EnemysAI : MonoBehaviour
     public float speed = 3;
     public float stoppingDistance = 1.3f;  //1.3
     private float startDifficulty = 0.3f;
-    private float endDifficulty = 0.6f;
+    private float endDifficulty = 0.9f;
 
     [Header("Ice")]
     private float slowMultiplier = 1f;
@@ -54,7 +54,7 @@ public class EnemysAI : MonoBehaviour
         player = FindAnyObjectByType<PlayerFighter>().GetComponent<Transform>();
         collide = GetComponent<SphereCollider>();
         //bounty = bounty + (GameManager.Instance.lootBoxCost / 3);
-        bounty = bounty + (GameManager.Instance.gameDifferent - 1) * 2;
+        bounty = Mathf.RoundToInt(bounty * Mathf.Lerp(1f, 25f, GameManager.Instance.gameDifferent / 100f));
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -116,7 +116,7 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    public void ApplySlow(float multiplier = 0.1f, float duration = 5f)
+    public void ApplySlow(float multiplier = 0.2f, float duration = 7.5f)
     {
         slowMultiplier -= multiplier;
         slowTimer += duration;

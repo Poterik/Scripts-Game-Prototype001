@@ -8,7 +8,6 @@ public class StationTower : MonoBehaviour
     private int maxCapture = 5;
     private float currentCapture;
     private bool isCaptured;
-    private float lifetime = 300f;
 
     [Header("References")]
     public Slider slider;
@@ -24,7 +23,6 @@ public class StationTower : MonoBehaviour
         }
 
         upgradeManager = UpgradeManager.Instance;
-        //Destroy(gameObject, lifetime);
     }
 
     private void Update()

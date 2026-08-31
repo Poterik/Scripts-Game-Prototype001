@@ -88,7 +88,7 @@ public class BulletProjectile : MonoBehaviour
         //TryApplyVampirism(totalDamage);
 
         ricochet--;
-        damage = Mathf.RoundToInt(damage * 0.9f);
+        damage = Mathf.RoundToInt(damage * 0.975f);
 
         if (ricochet <= 0 || damage < 5)
         {

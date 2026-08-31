@@ -48,7 +48,7 @@ public class FireAttack : MonoBehaviour
         if (hitAny)
         {
             audioSource.PlayOneShot(impactClips[Random.Range(0, impactClips.Length)]);
-            fireMultiple += 0.1f;
+            fireMultiple += 0.5f;
         }
         nextTickTime = Time.time + tickInterval;
     }

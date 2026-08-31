@@ -53,7 +53,9 @@ public class GameManager : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject enemyLightPrefab;
     public GameObject enemyTankPrefab;
-    public float spawnDelay = 5f;
+    public float spawnDelay;
+    private float startDelay = 3f;
+    private float endDelay = 0.5f;
     public float rangeSpawn = 150f;
     public GameObject healCapsule;
     public GameObject healCircle;
@@ -216,7 +218,7 @@ public class GameManager : MonoBehaviour
             }
 
             Instantiate(stationPrefab, SetRandomPosition(rangeSpawn / 3f), Quaternion.identity);
-            yield return new WaitForSeconds(20f);
+            yield return new WaitForSeconds(10f);
         }
     }
 
@@ -346,6 +348,9 @@ public class GameManager : MonoBehaviour
 
     public void UpdateExp(int value)
     {
+        BossAI bao = FindAnyObjectByType<BossAI>();
+        if (bao != null) return;
+
         currentExp += value;
 
         if (currentExp >= expForDiff)
@@ -365,10 +370,12 @@ public class GameManager : MonoBehaviour
         gameDifferent++;
         TrySpawnBoss();
 
-        expForDiff = 100 + gameDifferent * 50;
+        //expForDiff = 100 + gameDifferent * 50;
+        //expForDiff = Mathf.RoundToInt(100 * Mathf.Pow(1 + gameDifferent * 0.1f, 2f));
+        expForDiff += gameDifferent * 10;
 
-        float minSpawnDelay = 0.5f;
-        spawnDelay = Mathf.Max(spawnDelay / gameDifferent, minSpawnDelay);
+        //spawnDelay = Mathf.Max(spawnDelay / gameDifferent, minSpawnDelay);
+        spawnDelay = Mathf.Lerp(startDelay, endDelay, gameDifferent / 10f);
 
         UpgradeManager.Instance.ShowRandomUpgrades(UpgradeManager.Instance.legendaryUpgrades);
         UpdateLevelSlider();
