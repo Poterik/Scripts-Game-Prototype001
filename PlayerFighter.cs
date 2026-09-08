@@ -123,7 +123,7 @@ public class PlayerFighter : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         healthBar.value = currentHealth;
         currentHealthText.text = currentHealth.ToString();
-        
+        if (value < 0) GameManager.Instance.ShowHit();
 
         if (currentHealth <= 0) 
         { 

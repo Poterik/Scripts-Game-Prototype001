@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
     public PlayerFighter player;
     public Slider bossHealthSlider;
 
+    [Header("Hit Screen")]
+    public Image hitImage;
+    private Color hitColor = new Color32(113, 221, 222, 100);
+    private float fadeSpeed = 0.5f;
+
     [Header("Level Settings")]
     public Slider levelSlider;
     public TextMeshProUGUI levelText;
@@ -100,11 +105,26 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        HandleHitScreen();
 
         if (Keyboard.current.eKey.wasPressedThisFrame && CheckActiveWindow())
         {
             FindNearbyLootBox();
         }
+    }
+
+    private void HandleHitScreen()
+    {
+        if (hitImage.color.a <= 0f) return;
+
+        var c = hitImage.color;
+        c.a = Mathf.MoveTowards(c.a, 0f, fadeSpeed * Time.deltaTime);
+        hitImage.color = c;
+    }
+
+    public void ShowHit()
+    {
+        hitImage.color = hitColor;
     }
 
     private void Initializer()
