@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     [Header("Economy")]
     public TextMeshProUGUI moneyDisplay;
     private int money = 0;
+    public float moneyMultiplier = 1f;
     public GameObject moneyPrefab;
     public int lootBoxCost;
     public int cursedBoxCost = 25;
@@ -32,8 +33,9 @@ public class GameManager : MonoBehaviour
     public Slider levelSlider;
     public TextMeshProUGUI levelText;
     public int gameDifferent = 1;
-    private int expForDiff = 100;
+    private int expForDiff = 200;
     private int currentExp;
+    public float expMultiplier = 1f;
     public bool gameOver = false;
     private int lifetime;
 
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
     public GameObject enemyPrefab;
     public GameObject enemyLightPrefab;
     public GameObject enemyTankPrefab;
+    public GameObject enemyVikingPrefab;
     public float spawnDelay;
     private float startDelay = 3f;
     private float endDelay = 0.5f;
@@ -173,17 +176,18 @@ public class GameManager : MonoBehaviour
 
     public void UpdateMoney(int bounty)
     {
-        //int getMoney = bounty + (gameDifferent - 1) * 2;
-        money += bounty;
+        int getmoney = bounty > 0 ? Mathf.RoundToInt(bounty * moneyMultiplier) : bounty;
+
+        money += getmoney;
         moneyDisplay.text = $"{money:N0}$";
         if (bounty > 0) 
         { 
-            UpgradeStatistics.Instance.RecordEndStatistic("Money", bounty);
+            UpgradeStatistics.Instance.RecordEndStatistic("Money", getmoney);
             audioSource.PlayOneShot(moneySounds[Random.Range(0, moneySounds.Length)], 0.6f);
         }
         Instantiate(moneyPrefab, player.transform.position + Vector3.right * 1.25f, Quaternion.identity)
             .GetComponent<DamagePopup>()
-            .SetName($"{bounty}$");
+            .SetName($"{getmoney}$");
     }
 
     private IEnumerator PassiveMoneyIncome()
@@ -254,15 +258,27 @@ public class GameManager : MonoBehaviour
 
     private GameObject GetEnemy()
     {
-        if (gameDifferent < 10) return enemyPrefab;
-        if (gameDifferent < 20) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
+        if (gameDifferent < 11) return enemyPrefab;
+        if (gameDifferent < 21) return Random.Range(0, 10) < 7 ? enemyPrefab : enemyLightPrefab;
 
-        int rand = Random.Range(0, 10);
+        if (gameDifferent < 31)
+        {
+            float secRand = Random.Range(0f, 10f);
+            return secRand switch
+            {
+                < 6 => enemyPrefab,
+                < 8f => enemyLightPrefab,
+                _ => enemyTankPrefab,
+            };
+        }
+
+        float rand = Random.Range(0f, 10f);
         return rand switch
         {
             < 5 => enemyPrefab,
-            < 8 => enemyLightPrefab,
-            _ => enemyTankPrefab,
+            < 7 => enemyLightPrefab,
+            < 9.8f => enemyTankPrefab,
+            _ => enemyVikingPrefab,
         };
     }
 
@@ -351,7 +367,7 @@ public class GameManager : MonoBehaviour
         BossAI bao = FindAnyObjectByType<BossAI>();
         if (bao != null) return;
 
-        currentExp += value;
+        currentExp += Mathf.RoundToInt(value * expMultiplier);
 
         if (currentExp >= expForDiff)
         {

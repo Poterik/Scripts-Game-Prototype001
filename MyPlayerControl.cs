@@ -113,10 +113,10 @@ public class MyPlayerControl : MonoBehaviour
         controller.Move(moveVelocity * Time.deltaTime);
     }
 
-    public void ApplySlowDebuf(float multiple = 0.1f, float duration = 7.5f)
+    public void ApplySlowDebuf(float multiple = 0.1f, float duration = 5f)
     {
-        speedMultiplier -= multiple;
-        slowTime += duration;
+        speedMultiplier = Mathf.Clamp(speedMultiplier - multiple, 0f, 1f);
+        slowTime += Mathf.Clamp(slowTime + duration, 0f, 30f);
     }
 
     private void HandleSlowDebuff()

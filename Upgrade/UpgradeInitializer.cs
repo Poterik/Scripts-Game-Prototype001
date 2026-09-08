@@ -59,6 +59,8 @@ public class UpgradeInitializer : MonoBehaviour
         //Bind("Regenerator", u => gameManager.player.regeneration += u.bonus, manager.allUpgrades);
         Bind("Recover", u => gameManager.recovery += u.bonus, manager.allUpgrades);
         //Bind("Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.allUpgrades);
+        Bind("Expalibur", u => gameManager.expMultiplier += u.bonus / 100f, manager.allUpgrades);
+        Bind("GreedIsGood", u => gameManager.moneyMultiplier += u.bonus / 100f, manager.allUpgrades);
 
         //
         //----Legendary Upgrades----
