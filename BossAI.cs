@@ -18,7 +18,7 @@ public class BossAI : EnemysAI
 
     [Header("Cooldown Settings")]
     private float lastUsedCooldown;
-    private float circleCooldown = 30f;
+    private float circleCooldown = 300f;
     private float explosionCooldown = 15f;
     private float perExplosionCooldown = 0.5f;
     private float laserCooldown = 20;
@@ -108,7 +108,7 @@ public class BossAI : EnemysAI
     {
         float dist = Vector3.Distance(transform.position, player.transform.position);
 
-        if (dist > 50f && gameManager.gameDifferent >= 30)
+        if (gameManager.gameDifferent >= 30)
         {
             if (TryUseAttack(BossState.Circle)) currentState = BossState.Circle;
             return;
@@ -141,7 +141,11 @@ public class BossAI : EnemysAI
 
     private void Circle()
     {
-        Instantiate(magicCircle, transform.position, Quaternion.identity);
+        Vector3 spawnPos = Physics.Raycast(new Vector3(250f, 50f, 250f), Vector3.down, out RaycastHit hit, 200f) 
+            ? spawnPos = hit.point 
+            : spawnPos = player.transform.position;
+
+        Instantiate(magicCircle, spawnPos, Quaternion.identity);
 
         /*lastUsedCooldown = Time.time + circleCooldown;
         currentState = BossState.Wait;*/

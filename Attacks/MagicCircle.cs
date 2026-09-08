@@ -9,36 +9,40 @@ public class MagicCircle : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip circleSound;
     public AudioClip[] circleTouch;
+    private BossAI boss;
 
     [Header("Settings")]
-    private float scale;
-    private bool hasAttacking;
-    private float scaleMultiple = 1f;
-    private float lifetime = 30f;
-    private int damage;
+    private bool isCollide = false;
+    private float growSpeed = 3f; //3f
+    private float tickInterval = 5f;
+    private float lastTickInterval = 0f;
+    private int damage = 1;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.Instance;
         fighter = gameManager.player;
-        damage = Mathf.RoundToInt(3f * GameManager.Instance.gameDifferent);
+        damage *= gameManager.gameDifferent;
+        boss = FindAnyObjectByType<BossAI>();
+        if (boss == null) Debug.Log("Boss not found");
 
         StartCoroutine(SwapSound());
 
-        Destroy(this.gameObject, lifetime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player") || hasAttacking) return;
+        if (!other.CompareTag("Player")) return;
 
-        hasAttacking = true;
+        isCollide = true;
+    }
 
-        audioSource.PlayOneShot(circleTouch[Random.Range(0, circleTouch.Length)]);
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
 
-        //fighter.UpdateHealth(Mathf.RoundToInt(-damage));
-        fighter.UpdateHealth(-fighter.maxHealth / 5);
+        isCollide = false;
     }
 
     private IEnumerator SwapSound()
@@ -51,9 +55,18 @@ public class MagicCircle : MonoBehaviour
 
     private void Update()
     {
-        scale += Time.deltaTime * scaleMultiple;
-        transform.localScale = new Vector3(scale, 5f, scale);
+        if (boss == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        scaleMultiple += Time.deltaTime;
+        if (transform.localScale.x > 0f) transform.localScale -= new Vector3(growSpeed, 0f, growSpeed) * Time.deltaTime;
+
+        if (Time.time <= lastTickInterval || isCollide) return;
+
+        lastTickInterval = Time.time + tickInterval;
+        fighter.UpdateHealth(-damage);
+        audioSource.PlayOneShot(circleTouch[Random.Range(0, circleTouch.Length)]);
     }
 }
