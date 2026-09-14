@@ -4,16 +4,19 @@ using UnityEngine.UI;
 public class StationTower : MonoBehaviour
 {
     [Header("Settings")]
-    private int minCapture = 0;
-    private int maxCapture = 5;
-    private float currentCapture;
-    private bool isCaptured;
+    protected int minCapture = 0;
+    protected int maxCapture = 5;
+    protected float currentCapture;
+    protected bool isCaptured;
+    protected float lifetime = 60f;
+    protected float maxDistance = 25f;
 
     [Header("References")]
     public Slider slider;
-    private UpgradeManager upgradeManager;
+    protected UpgradeManager upgradeManager;
+    protected Transform player;
 
-    private void Start()
+    protected virtual void Start()
     {
         if (slider != null)
         {
@@ -23,9 +26,10 @@ public class StationTower : MonoBehaviour
         }
 
         upgradeManager = UpgradeManager.Instance;
+        player = GameManager.Instance.player.transform;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         currentCapture = isCaptured ? currentCapture + Time.deltaTime : currentCapture - Time.deltaTime;
         currentCapture = Mathf.Clamp(currentCapture, minCapture, maxCapture);
@@ -36,6 +40,8 @@ public class StationTower : MonoBehaviour
             RandomlyGift();
             Destroy(gameObject);
         }
+
+        HandleCheckDistance();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -50,6 +56,22 @@ public class StationTower : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         isCaptured = false;
+    }
+
+    protected void HandleCheckDistance()
+    {
+        if (player == null) return;
+
+        float distance = Vector3.Distance(transform.position, player.transform.position);
+        if (distance < maxDistance) return;
+        lifetime -= Time.deltaTime;
+        if (lifetime <= 0) Destroy(gameObject);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, maxDistance);
     }
 
     private void RandomlyGift()

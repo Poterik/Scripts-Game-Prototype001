@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour
     private float startDelay = 3f;
     private float endDelay = 0.5f;
     public float rangeSpawn = 150f;
+    public LayerMask groundLayer;
     public GameObject healCapsule;
     public GameObject healCircle;
     public int maxEnemies = 1000;
@@ -371,7 +372,7 @@ public class GameManager : MonoBehaviour
         //Vector3 spawnPos = player.position + randomPos;
         //Vector3 spawnPos = transform.position + randomPos;
         Vector3 spawnPos = player.transform.position + randomPos;
-        if (Physics.Raycast(spawnPos, Vector3.down, out RaycastHit hit, 200f))
+        if (Physics.Raycast(spawnPos, Vector3.down, out RaycastHit hit, 200f, groundLayer))
         { 
             return hit.point + Vector3.up * 0.5f; 
         }

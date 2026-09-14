@@ -118,7 +118,7 @@ public class EnemysAI : MonoBehaviour
 
     public void ApplySlow(float multiplier = 0.2f, float duration = 7.5f)
     {
-        slowMultiplier -= multiplier;
+        slowMultiplier = Mathf.Clamp(slowMultiplier - multiplier, 0f, 1f);
         slowTimer += duration;
         Debug.Log("Enemys: slow has been appled");
     }
