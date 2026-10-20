@@ -6,6 +6,7 @@ public class UpgradeInitializer : MonoBehaviour
 {
     private GameManager gameManager;
     private AbilityManager abilityManager;
+    private ProjectileSpawner projectileSpawner;
 
     private void Start()
     {
@@ -22,6 +23,7 @@ public class UpgradeInitializer : MonoBehaviour
             Debug.LogError("AbilityManager not found!");
             return;
         }
+        projectileSpawner = gameManager.player.GetComponent<ProjectileSpawner>();
 
         InitializeUpgrades(upgradeManager);
     }
@@ -51,8 +53,8 @@ public class UpgradeInitializer : MonoBehaviour
         },manager.allUpgrades);
         //Bind("Projectile", u => GameManager.Instance.bulletSpeed += u.bonus, manager.allUpgrades);
         //Bind("Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.allUpgrades);
-        Bind("Attrange", u => GameManager.Instance.player.attackRange += u.bonus, manager.allUpgrades);
-        Bind("Targeter", u => GameManager.Instance.player.maxTarget += u.bonus, manager.allUpgrades);
+        Bind("Attrange", u => projectileSpawner.attackRange += u.bonus, manager.allUpgrades);
+        Bind("Targeter", u => projectileSpawner.maxTarget += u.bonus, manager.allUpgrades);
         Bind("Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.allUpgrades);
         //Bind("Luckerok", u => GameManager.Instance.dropRate += u.bonus / 100f, manager.allUpgrades);
         //Bind("Criter", u => gameManager.critChance += u.bonus / 100f, manager.allUpgrades);
@@ -79,7 +81,7 @@ public class UpgradeInitializer : MonoBehaviour
         }, manager.legendaryUpgrades);*/
         Bind("Extra Projectile", u => GameManager.Instance.bulletSpeed += u.bonus, manager.legendaryUpgrades);
         //Bind("Extra Vampirism", u => GameManager.Instance.vampirism += u.bonus, manager.legendaryUpgrades);
-        Bind("Extra Attrange", u => GameManager.Instance.player.attackRange += u.bonus, manager.legendaryUpgrades);
+        Bind("Extra Attrange", u => projectileSpawner.attackRange += u.bonus, manager.legendaryUpgrades);
         //Bind("Extra Targeter", u => GameManager.Instance.player.maxTarget += u.bonus, manager.legendaryUpgrades);
         Bind("Extra Ricorange", u => GameManager.Instance.bulletSearchRange += u.bonus, manager.legendaryUpgrades);
         //Bind("Extra Luckerok", u => GameManager.Instance.dropRate += u.bonus / 100f, manager.legendaryUpgrades);
@@ -101,7 +103,7 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Cursed Health", u => gameManager.player.UpdateMaxHealth(u.bonus), manager.cursedUpgrades);
         Bind("Cursed Ricochette", u => gameManager.bulletRicochet += u.bonus, manager.cursedUpgrades);
         //Bind("Cursed Targeter", u => gameManager.player.maxTarget += u.bonus, manager.cursedUpgrades);
-        Bind("Cursed Attrange", u => gameManager.player.attackRange += u.bonus, manager.cursedUpgrades);
+        Bind("Cursed Attrange", u => projectileSpawner.attackRange += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Projectile", u => gameManager.bulletSpeed += u.bonus, manager.cursedUpgrades);
         Bind("Cursed Multicrit", u => gameManager.critDamage += u.bonus / 100f, manager.cursedUpgrades);
         //Bind("Cursed Vampirism", u => gameManager.vampirism += u.bonus, manager.cursedUpgrades);
@@ -121,6 +123,34 @@ public class UpgradeInitializer : MonoBehaviour
         Bind("Aura Buffer", u => abilityManager.ApplyUpgrade("Aura Buffer", u.bonus), manager.abilitiesUpgrades);
         Bind("Ice Flakes", u => abilityManager.ApplyUpgrade("Ice Flakes", u.bonus), manager.abilitiesUpgrades);
         Bind("Toxic Cloud", u => abilityManager.ApplyUpgrade("Toxic Cloud", u.bonus), manager.abilitiesUpgrades);
+
+        //
+        //----Projectile Upgrade----
+        //
+        Bind("Bullet", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Pusher", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Hex", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Weather", u =>
+        {
+            projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus];
+            UpgradeManager.Instance.allUpgrades.RemoveAll(u => u.name == "Targeter");
+            gameManager.player.maxDelay = 0.5f;
+        }, manager.projectileUpgrades);
+        Bind("Fire", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Frozen", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Grenade", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Concussive", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Bounce", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Mine", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
+        Bind("Black Hole", u =>
+        {
+            projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus];
+            gameManager.player.maxDelay = 0.5f;
+            UpgradeManager.Instance.allUpgrades.RemoveAll(u => u.name == "Ricochette");
+            UpgradeManager.Instance.legendaryUpgrades.RemoveAll(u => u.name == "Extra Ricochette");
+            UpgradeManager.Instance.cursedUpgrades.RemoveAll(u => u.name == "Cursed Ricochette");
+        }, manager.projectileUpgrades);
+        Bind("Satellite", u => projectileSpawner.projectilePrefab = projectileSpawner.projectileVariants[u.bonus], manager.projectileUpgrades);
 
         Debug.Log("✓ Upgrades initialized");
     }

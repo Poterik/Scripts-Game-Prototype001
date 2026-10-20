@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using System.Collections;
+using Unity.VisualScripting;
 
 public class UpgradeManager : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class UpgradeManager : MonoBehaviour
     public List<UpgradeData> legendaryUpgrades = new List<UpgradeData>();
     public List<UpgradeData> cursedUpgrades = new List<UpgradeData>();
     public List<UpgradeData> abilitiesUpgrades = new List<UpgradeData>();
+    public List<UpgradeData> projectileUpgrades = new List<UpgradeData>();
     private List<UpgradeData> currentUpgrades = new List<UpgradeData>();
     private List<Button> upgradeButtons = new List<Button>();
 
@@ -45,9 +48,11 @@ public class UpgradeManager : MonoBehaviour
     {
         //ShowRandomUpgrades();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<MyPlayerControl>();
+
+        StartCoroutine(ShowUpgradesAfterTime(projectileUpgrades));
     }
 
-    private void Update()
+    /*private void Update()
     {
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
@@ -56,9 +61,13 @@ public class UpgradeManager : MonoBehaviour
             //ShowRandomUpgrades(cursedUpgrades);
             //ShowRandomUpgrades(abilitiesUpgrades);
             //ApplyAllUpgrades();
-            GameManager.Instance.ShowHit();
+            //GameManager.Instance.ShowHit();
+            //Instantiate(GameManager.Instance.newBullet, player.transform.position + Vector3.up * 2f, Quaternion.identity);
+            GameManager.weaponReached++;
+            StartCoroutine(ShowUpgradesAfterTime(projectileUpgrades));
+            GameManager.Instance.player.DecreaseSearchDelay();
         }
-    }
+    }*/
 
     public void ShowRandomUpgrades(List<UpgradeData> upgrades)
     {
@@ -73,6 +82,20 @@ public class UpgradeManager : MonoBehaviour
         currentUpgrades = shuffled.Take(upgradesToShow).ToList();
 
         ShowWindow();
+    }
+
+    public IEnumerator ShowUpgradesAfterTime(List<UpgradeData> upgrades)
+    {
+        yield return new WaitForSeconds(0.2f);
+
+        int weapon = Mathf.Min(GameManager.weaponReached, projectileUpgrades.Count);
+        if (weapon <= 3)
+        { 
+            currentUpgrades = upgrades.Take(weapon).ToList();
+            ShowWindow();
+        }
+        else 
+            ShowRandomUpgrades(upgrades);
     }
 
     private void ApplyAllUpgrades()
@@ -94,6 +117,8 @@ public class UpgradeManager : MonoBehaviour
     public void ApplyUpgrade(UpgradeData upgrade)
     {
         upgrade.applyAction?.Invoke(upgrade);
+
+        if (projectileUpgrades.Contains(upgrade)) return;
 
         UpgradeStatistics.Instance?.RecordUpgradeSelection(upgrade.name);
         UpgradeStatistics.Instance.RecordEndStatistic("Upgrades", 1);

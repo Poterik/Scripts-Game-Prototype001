@@ -237,6 +237,7 @@ public class BossAI : EnemysAI
         if (health <= 0)
         {
             isDead = true;
+            if (gameManager.gameDifferent >= 30) StartCoroutine(GameManager.Instance.WeaponReachedShow());
             animator.SetBool("Walk", false);
 
             bossHealthSlider.gameObject.SetActive(false);
@@ -246,69 +247,6 @@ public class BossAI : EnemysAI
             UpgradeStatistics.Instance.RecordEndStatistic("Boss Kills", 1);
             TriggerAnimation(1800);
             Destroy(gameObject, 1f);
-        }
-    }
-
-    private IEnumerator TestSpawns()
-    {
-        while (true)
-        {
-            Instantiate(magicCircle, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(5f);
-        }
-    }
-
-    private IEnumerator SpawnLaserAOE()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(5f);
-            Vector3 pos = Physics.Raycast(player.transform.position, Vector3.down, out RaycastHit hit, 200f) 
-                ? hit.point 
-                : player.transform.position;
-            Instantiate(laserAOE, pos, Quaternion.identity);
-        }
-    }
-
-    private IEnumerator SpawnDelayedExplosion()
-    {
-        while (true)
-        {
-            float dist = Vector3.Distance(transform.position, player.transform.position);
-
-            if (dist < 50f)
-            {
-                for (int i = 0, count = gameManager.gameDifferent / 2; i < count; i++)
-                {
-                    Vector3 spawnPos = Physics.Raycast(player.transform.position, Vector3.down, out RaycastHit hit, 200f) 
-                        ? hit.point 
-                        : player.transform.position;
-
-                    Instantiate(delayedExplosion, spawnPos, Quaternion.identity);
-                    yield return new WaitForSeconds(0.5f);
-                }
-                yield return new WaitForSeconds(10f);
-            }
-            else yield return null;
-        }
-    }
-
-    private IEnumerator SpawnMagicCircle()
-    {
-        while (true)
-        {
-            float dist = Vector3.Distance(transform.position, player.transform.position);
-
-            if (dist > 50f)
-            {
-                Instantiate(magicCircle, transform.position, Quaternion.identity);
-                yield return new WaitForSeconds(circleCooldown);
-                Debug.Log("Player in distance");
-            }
-            else
-            {
-                yield return null;
-            }
         }
     }
 

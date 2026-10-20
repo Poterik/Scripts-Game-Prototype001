@@ -14,16 +14,16 @@ public class MagicCircle : MonoBehaviour
     [Header("Settings")]
     private bool isCollide = false;
     private float growSpeed = 3f; //3f
-    private float tickInterval = 5f;
+    private float tickInterval = 1f;
     private float lastTickInterval = 0f;
-    private int damage = 1;
+    private int damage;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         gameManager = GameManager.Instance;
         fighter = gameManager.player;
-        damage *= gameManager.gameDifferent;
+        damage = gameManager.gameDifferent / 2;
         boss = FindAnyObjectByType<BossAI>();
         if (boss == null) Debug.Log("Boss not found");
 
@@ -61,7 +61,7 @@ public class MagicCircle : MonoBehaviour
             return;
         }
 
-        if (transform.localScale.x > 0f) transform.localScale -= new Vector3(growSpeed, 0f, growSpeed) * Time.deltaTime;
+        if (transform.localScale.x > 10f) transform.localScale -= new Vector3(growSpeed, 0f, growSpeed) * Time.deltaTime;
 
         if (Time.time <= lastTickInterval || isCollide) return;
 

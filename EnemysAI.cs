@@ -101,7 +101,7 @@ public class EnemysAI : MonoBehaviour
     public void ApplyToxic(float multiple = 0.2f, float duration = 10f)
     {
         vulnerability += multiple;
-        toxicTimer += duration;
+        toxicTimer = duration;
     }
 
     protected void HandleToxicTime()
@@ -116,10 +116,10 @@ public class EnemysAI : MonoBehaviour
         }
     }
 
-    public void ApplySlow(float multiplier = 0.2f, float duration = 7.5f)
+    public void ApplySlow(float multiplier = 0.2f, float duration = 10f)
     {
         slowMultiplier = Mathf.Clamp(slowMultiplier - multiplier, 0f, 1f);
-        slowTimer += duration;
+        slowTimer = duration;
         Debug.Log("Enemys: slow has been appled");
     }
 

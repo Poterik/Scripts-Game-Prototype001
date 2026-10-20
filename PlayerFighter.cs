@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class PlayerFighter : MonoBehaviour
 {
-    [Header("Sound")]
-    private AudioSource audioSource;
-    public AudioClip[] bulletShotClips;
-
     [Header("Health")]
     private Slider healthBar;
     public int maxHealth = 100;
@@ -18,20 +14,15 @@ public class PlayerFighter : MonoBehaviour
     public int regeneration = 5;
     public float regenCooldown = 7.5f;
     public bool isHealing;
-
-    [Header("Fight")]
-    public GameObject bulletPrefab;
-    public float attackRange = 10f;
-    public float searchDelay = 2.5f;
-    public int maxTarget = 2;
+    public float maxDelay = 0.1f;
 
     [Header("References")]
     public GameObject healAura;
+    private ProjectileSpawner projectileSpawner;
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-
+        projectileSpawner = GetComponent<ProjectileSpawner>();
         healthBar = GetComponentInChildren<Slider>();
         if (healthBar != null)
         {
@@ -43,7 +34,7 @@ public class PlayerFighter : MonoBehaviour
 
         healAura.SetActive(false);
 
-        StartCoroutine(FindEnemys());
+        //StartCoroutine(FindEnemys());
         StartCoroutine(RegenerateHealth());
     }
 
@@ -56,59 +47,15 @@ public class PlayerFighter : MonoBehaviour
         }
     }
 
-    private IEnumerator FindEnemys()
-    {
-        while (true)
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange);
-
-            List<Collider> enemies = new List<Collider>();
-            foreach (Collider col in hitColliders)
-            {
-                if (col.CompareTag("Enemy"))
-                    enemies.Add(col);
-            }
-
-            enemies.Sort((a, b) =>
-            Vector3.Distance(transform.position, a.transform.position)
-            .CompareTo(Vector3.Distance(transform.position, b.transform.position))
-            );
-
-            int target = maxTarget;
-            foreach (Collider col in enemies)
-            {
-                if (col.CompareTag("Enemy"))
-                {
-                    if (target <= 0) break;
-                    if (bulletPrefab == null) yield break;
-
-                    CreateBullet(col.transform);
-                    target--;
-                }
-            }
-            
-            yield return new WaitForSeconds(searchDelay);
-        }
-    }
-
     public void DecreaseSearchDelay()
     {
-        searchDelay = Mathf.Max(0.1f, searchDelay - 0.1f);
-        if (searchDelay <= 0.1f)
+        projectileSpawner.searchDelay = Mathf.Max(maxDelay, projectileSpawner.searchDelay - 0.1f);
+        if (projectileSpawner.searchDelay <= maxDelay)
         {
             /*UpgradeData item = UpgradeManager.Instance.allUpgrades.Find(u => u.name == "Bulleter");
             UpgradeManager.Instance.allUpgrades.Remove(item);*/
             UpgradeManager.Instance.allUpgrades.RemoveAll(u => u.name == "Bulleter");
         }
-    }
-
-    private void CreateBullet(Transform transform)
-    {
-        //Vector3 distance = transform.position - this.transform.position;
-        GameObject bullet = Instantiate(bulletPrefab, this.transform.position + Vector3.forward, Quaternion.identity);
-        BulletProjectile bp = bullet.GetComponent<BulletProjectile>();
-        audioSource.PlayOneShot(bulletShotClips[Random.Range(0, bulletShotClips.Length)]);
-        bp.SetTarget(transform);
     }
 
     public bool CheckHealth()

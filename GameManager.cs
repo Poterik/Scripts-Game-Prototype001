@@ -10,6 +10,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Weapon Setting")]
+    public GameObject weaponTextObject;
+    public AudioClip weaponSoundClip;
+    public static int weaponReached = 1;
+
     [Header("Sound")]
     public AudioMixerGroup sfxGroup;
     public AudioClip[] moneySounds;
@@ -72,6 +77,7 @@ public class GameManager : MonoBehaviour
     private int currentEnemyCount = 0;
     public GameObject cursedLootBoxPrefab;
     public GameObject defaultLootBoxPrefab;
+    public GameObject newBullet;
     //Story
     public TextMeshProUGUI newStoryText;
     public GameObject storyPrefab;
@@ -112,6 +118,21 @@ public class GameManager : MonoBehaviour
         {
             FindNearbyLootBox();
         }
+    }
+
+    public IEnumerator WeaponReachedShow()
+    {
+        ProjectileSpawner ps = player.GetComponent<ProjectileSpawner>();
+
+        if (ps == null || ps.projectileVariants.Count <= weaponReached) yield break;
+
+        audioSource.PlayOneShot(weaponSoundClip);
+        weaponTextObject.SetActive(true);
+        weaponReached++;
+
+        yield return new WaitForSeconds(2.5f);
+
+        weaponTextObject.SetActive(false);
     }
 
     private void HandleHitScreen()
@@ -236,7 +257,7 @@ public class GameManager : MonoBehaviour
     {
         while (true && !gameOver)
         {
-            if (gameDifferent < 20)
+            if (gameDifferent < 21)
             {
                 yield return new WaitForSeconds(5f);
                 continue;
