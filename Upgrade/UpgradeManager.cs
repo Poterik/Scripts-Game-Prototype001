@@ -52,7 +52,7 @@ public class UpgradeManager : MonoBehaviour
         StartCoroutine(ShowUpgradesAfterTime(projectileUpgrades));
     }
 
-    /*private void Update()
+    private void Update()
     {
         if (Keyboard.current.fKey.wasPressedThisFrame)
         {
@@ -67,7 +67,7 @@ public class UpgradeManager : MonoBehaviour
             StartCoroutine(ShowUpgradesAfterTime(projectileUpgrades));
             GameManager.Instance.player.DecreaseSearchDelay();
         }
-    }*/
+    }
 
     public void ShowRandomUpgrades(List<UpgradeData> upgrades)
     {
@@ -131,9 +131,10 @@ public class UpgradeManager : MonoBehaviour
         audioSource.PlayOneShot(upgradeSound);
         upgradeWindow.SetActive(true);
         ShowUpgrades();
+        NewUIManager.Instance.currentState = NewUIManager.MenuState.Upgrade;
 
         Time.timeScale = 0;
-        player.isMenu = true;
+        NewUIManager.Instance.isMenu = true;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -143,7 +144,7 @@ public class UpgradeManager : MonoBehaviour
         upgradeWindow.SetActive(false);
 
         Time.timeScale = 1;
-        player.isMenu = false;
+        NewUIManager.Instance.isMenu = false;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -178,6 +179,7 @@ public class UpgradeManager : MonoBehaviour
             int index = i;
             btn.onClick.AddListener(() => SelectUpgrade(index));
             btn.onClick.AddListener(() => CloseWindow());
+            btn.onClick.AddListener(() => NewUIManager.Instance.currentState = NewUIManager.MenuState.None);
         }
     }
 

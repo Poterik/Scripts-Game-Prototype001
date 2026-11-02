@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,6 +8,9 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+
+    [Header("Handbook Settings")]
+    public Transform handbookContent;
 
     [Header("UI Settings")]
     public GameObject escapeMenu;
@@ -17,6 +22,9 @@ public class UIManager : MonoBehaviour
     private MyPlayerControl playerControl;
     private UpgradeManager upgradeManager;
 
+    public GameObject[] menus;
+    public List<HandbookData> handbookUpgrades = new List<HandbookData>();
+
     private void Awake()
     {
         if (Instance == null) Instance = this;
@@ -27,6 +35,7 @@ public class UIManager : MonoBehaviour
         }
 
         InitializeComponent();
+        CloseAll(null);
 
         sensivitySlider.value = playerControl.mouseSensivity;
         sensivityIntText.text = sensivitySlider.value.ToString();
@@ -55,6 +64,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void CloseAll(GameObject skip)
+    {
+        foreach (var menu in menus)
+        {
+            if (menu == null || menu == skip) continue;
+            if (menu.activeSelf)
+                menu.SetActive(false);
+        }
+    }
+
     private void ToggleEscapeMenu()
     {
         if (UpgradeStatistics.Instance.statsPanel.activeSelf || upgradeManager.upgradeWindow.activeSelf)
@@ -73,6 +92,7 @@ public class UIManager : MonoBehaviour
     {
         escapeMenu.SetActive(active);
         escapeMenuAddon.SetActive(false);
+        CloseAll(null);
 
         UpdateGameState(active);
     }
@@ -94,6 +114,7 @@ public class UIManager : MonoBehaviour
         bool willOpen = !escapeMenuAddon.activeSelf;
         settingAddon.SetActive(willOpen);
         escapeMenuAddon.SetActive(willOpen);
+        CloseAll(null);
     }
 
     private void OnSensivityChanged(float value)
@@ -111,4 +132,11 @@ public class UIManager : MonoBehaviour
         Application.Quit();
         #endif
     }
+}
+
+[Serializable]
+public class HandbookData
+{
+    public Image image;
+    public string text;
 }

@@ -58,11 +58,11 @@ public class UpgradeStatistics : MonoBehaviour
 
     private void ToggleStatPanel()
     {
-        if (upgradeManager.upgradeWindow.activeSelf || UIManager.Instance.escapeMenu.activeSelf) return;
+        if (upgradeManager.upgradeWindow.activeSelf || NewUIManager.Instance.menuPanel.activeSelf) return;
 
         bool willOpen = !statsPanel.activeSelf;
         statsPanel.SetActive(willOpen);
-        UIManager.Instance.UpdateGameState(willOpen);
+        NewUIManager.Instance.SetState(willOpen == true ? NewUIManager.MenuState.Stats : NewUIManager.MenuState.None);
 
         if (willOpen)
         {
@@ -72,7 +72,7 @@ public class UpgradeStatistics : MonoBehaviour
 
     public void ShowEndStatistic()
     {
-        UIManager.Instance.escapeMenuAddon.SetActive(true);
+        //NewUIManager.Instance.escapeMenuAddon.SetActive(true);
         endStatsAddon.SetActive(true);
 
         foreach (var end in endStatistic)

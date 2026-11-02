@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -106,7 +105,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(SpawnLootBox());
         UpdateLevelSlider();
         StarterPack();
-        SpawnStory();
+        //SpawnStory();
         Initializer();
     }
 
@@ -185,7 +184,7 @@ public class GameManager : MonoBehaviour
 
     private bool CheckActiveWindow()
     {
-        if (UpgradeManager.Instance.upgradeWindow.activeSelf || UIManager.Instance.escapeMenu.activeSelf) return false;
+        if (UpgradeManager.Instance.upgradeWindow.activeSelf || NewUIManager.Instance.menuPanel.activeSelf) return false;
         return true;
     }
 
@@ -464,12 +463,11 @@ public class GameManager : MonoBehaviour
         Time.fixedDeltaTime = 0f;*/
         if (gameOver) return;
 
-        gameOver = true;
-        UIManager.Instance.escapeMenu.SetActive(true);
-        UIManager.Instance.settingAddon.SetActive(false);
+        NewUIManager.Instance.SetState(NewUIManager.MenuState.Menu);
+        //NewUIManager.Instance.settingAddon.SetActive(false);
         UpgradeStatistics.Instance.ShowEndStatistic();
-        UIManager.Instance.UpdateGameState(true);
         AudioManager.Instance.mixer.SetFloat("SFXVolume", -80f);
         AudioManager.Instance.PlayGameOverSound();
+        gameOver = true;
     }
 }

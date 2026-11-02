@@ -9,7 +9,7 @@ public class ProjectileCube : ProjectileBase
     {
         base.Start();
         player = gameManager.player.transform;
-        forcePower = (damage / 1000f) * 2f;
+        forcePower = (damage / 1000f) * 3f;
     }
 
     protected override void OnTriggerEnter(Collider other)

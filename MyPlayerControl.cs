@@ -60,6 +60,7 @@ public class MyPlayerControl : MonoBehaviour
 
     private void LateUpdate()
     {
+        isMenu = NewUIManager.Instance.isMenu;
         if (isMenu) return;
 
         HandleOrbit();
